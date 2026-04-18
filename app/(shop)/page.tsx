@@ -1,13 +1,11 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductCardSkeleton } from "@/components/shop/ProductCardSkeleton";
-import { getFeaturedProducts, getCategories } from "@/actions/product";
+import { getFeaturedProducts } from "@/actions/product";
 import { HeroSection } from "@/components/shop/HeroSection";
-import { CategoryGrid } from "@/components/shop/CategoryGrid";
 import { FeaturesBar } from "@/components/shop/FeaturesBar";
 import { IngredientShowcase } from "@/components/shop/IngredientShowcase";
 import { BrandStory } from "@/components/shop/BrandStory";
@@ -47,17 +45,6 @@ async function FeaturedProducts() {
   }
 }
 
-async function Categories() {
-  try {
-    const categories = await getCategories();
-    return <CategoryGrid categories={categories} />;
-  } catch {
-    return (
-      <p className="text-center text-muted-foreground py-8">Unable to load categories.</p>
-    );
-  }
-}
-
 async function ProductScrollSection() {
   try {
     const products = await getFeaturedProducts();
@@ -70,52 +57,24 @@ async function ProductScrollSection() {
 export default function HomePage() {
   return (
     <div>
-      {/* 1. Cinematic hero with GSAP scroll-driven animations */}
+      {/* 1. Hero */}
       <HeroSection />
 
       {/* 2. Trust bar */}
       <FeaturesBar />
 
-      {/* 3. Ingredient storytelling (dark section) */}
+      {/* 3. Ingredient storytelling */}
       <IngredientShowcase />
 
-      {/* 4. Brand story — word-by-word reveal */}
+      {/* 4. Brand story */}
       <BrandStory />
 
-      {/* 5. Categories */}
-      <AnimatedSection className="py-16 container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground mb-1.5">
-              Browse
-            </p>
-            <h2 className="text-2xl font-bold">Shop by Category</h2>
-          </div>
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/products">
-              View All <ArrowRight className="h-4 w-4 ml-1" />
-            </Link>
-          </Button>
-        </div>
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="aspect-square rounded-2xl bg-muted animate-pulse" />
-              ))}
-            </div>
-          }
-        >
-          <Categories />
-        </Suspense>
-      </AnimatedSection>
-
-      {/* 6. Horizontal scroll product showcase (GSAP pinned) */}
+      {/* 5. Horizontal scroll product showcase */}
       <Suspense fallback={null}>
         <ProductScrollSection />
       </Suspense>
 
-      {/* 7. Featured products grid */}
+      {/* 6. Featured products grid */}
       <AnimatedSection className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
@@ -145,16 +104,16 @@ export default function HomePage() {
         </div>
       </AnimatedSection>
 
-      {/* 8. Before & After */}
+      {/* 7. Before & After */}
       <BeforeAfterSection />
 
-      {/* 9. Testimonials */}
+      {/* 8. Testimonials */}
       <TestimonialsSection />
 
-      {/* 10. Instagram */}
+      {/* 9. Instagram */}
       <InstagramSection />
 
-      {/* 11. CTA Banner */}
+      {/* 10. CTA Banner */}
       <AnimatedSection className="py-20 container mx-auto px-4">
         <div className="relative rounded-3xl overflow-hidden bg-foreground text-background px-8 py-16 text-center">
           <div className="relative z-10">

@@ -222,6 +222,12 @@ model OrderItem {
   @@index([orderId])
 }
 
+model Setting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
 model Review {
   id        String @id @default(cuid())
   userId    String

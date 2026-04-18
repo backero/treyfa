@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
@@ -47,8 +48,8 @@ export default function LoginPage() {
     >
       <div className="bg-background border border-border rounded-2xl p-8 shadow-sm">
         <div className="mb-8">
-          <Link href="/" className="font-bold text-lg tracking-tight">
-            TREYFA
+          <Link href="/">
+            <Image src="/logo.png" alt="Treyfa" width={96} height={36} className="object-contain h-9 w-auto" priority />
           </Link>
           <h1 className="text-2xl font-bold mt-6">Welcome back</h1>
           <p className="text-muted-foreground text-sm mt-1">Sign in to your account</p>

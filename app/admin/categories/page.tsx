@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { AdminCategoryActions } from "@/components/admin/AdminCategoryActions";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Category Management" };
@@ -17,34 +16,54 @@ export default async function AdminCategoriesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Categories</h1>
-          <p className="text-muted-foreground text-sm mt-1">{categories.length} total categories</p>
+          <p className="text-muted-foreground text-sm mt-1">{categories.length} total</p>
         </div>
         <AdminCategoryActions />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {categories.map((cat) => (
-          <div key={cat.id} className="bg-background border border-border rounded-xl overflow-hidden">
-            {cat.image && (
-              <div className="relative h-32 w-full">
-                <Image src={cat.image} alt={cat.name} fill className="object-cover" sizes="400px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </div>
-            )}
-            <div className="p-4 flex items-center justify-between">
-              <div>
-                <p className="font-medium">{cat.name}</p>
-                <p className="text-sm text-muted-foreground">{cat._count.products} products</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant={cat.isActive ? "success" : "secondary"}>
-                  {cat.isActive ? "Active" : "Inactive"}
-                </Badge>
-                <AdminCategoryActions category={cat} />
-              </div>
-            </div>
+      <div className="bg-background border border-border rounded-xl overflow-hidden">
+        <table className="w-full">
+          <thead className="border-b border-border bg-secondary/30">
+            <tr>
+              <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">NAME</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">DESCRIPTION</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">PRODUCTS</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">STATUS</th>
+              <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {categories.map((cat) => (
+              <tr key={cat.id} className="hover:bg-secondary/10 transition-colors">
+                <td className="px-4 py-3">
+                  <p className="text-sm font-medium">{cat.name}</p>
+                  <p className="text-xs text-muted-foreground">{cat.slug}</p>
+                </td>
+                <td className="px-4 py-3">
+                  <p className="text-sm text-muted-foreground line-clamp-1 max-w-xs">
+                    {cat.description ?? "—"}
+                  </p>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="text-sm">{cat._count.products}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <Badge variant={cat.isActive ? "success" : "secondary"}>
+                    {cat.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <AdminCategoryActions category={cat} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {categories.length === 0 && (
+          <div className="py-16 text-center">
+            <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

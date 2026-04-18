@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,9 +23,11 @@ type Props = {
   categories: Category[];
   product?: Product;
   onSuccess?: () => void;
+  redirectOnSuccess?: string;
 };
 
-export function ProductForm({ categories, product, onSuccess }: Props) {
+export function ProductForm({ categories, product, onSuccess, redirectOnSuccess }: Props) {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [images, setImages] = useState<string[]>(product?.images ?? []);
   const [imageUrl, setImageUrl] = useState("");
@@ -57,7 +60,11 @@ export function ProductForm({ categories, product, onSuccess }: Props) {
 
     if (result.success) {
       toast.success(product ? "Product updated" : "Product created");
-      onSuccess?.();
+      if (redirectOnSuccess) {
+        router.push(redirectOnSuccess);
+      } else {
+        onSuccess?.();
+      }
     } else {
       toast.error(result.error ?? "Failed to save product");
     }
@@ -106,20 +113,17 @@ export function ProductForm({ categories, product, onSuccess }: Props) {
             </SelectTrigger>
             <SelectContent>
               {categories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </SelectItem>
+                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="tags">Tags (comma-separated)</Label>
-          <Input id="tags" name="tags" defaultValue={product?.tags.join(", ")} placeholder="tag1, tag2, tag3" />
+          <Input id="tags" name="tags" defaultValue={product?.tags.join(", ")} placeholder="tag1, tag2" />
         </div>
       </div>
 
-      {/* Images */}
       <div className="space-y-3">
         <Label>Product Images</Label>
         <div className="flex gap-2">
@@ -151,7 +155,6 @@ export function ProductForm({ categories, product, onSuccess }: Props) {
         )}
       </div>
 
-      {/* Toggles */}
       <div className="flex gap-6">
         <label className="flex items-center gap-2 cursor-pointer">
           <input

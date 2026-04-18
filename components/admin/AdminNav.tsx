@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
@@ -31,8 +32,8 @@ export function AdminNav() {
     <aside className="fixed left-0 top-0 h-full w-64 bg-background border-r border-border flex flex-col z-40">
       {/* Logo */}
       <div className="p-6 border-b border-border">
-        <Link href="/" className="flex items-center gap-2 text-sm font-bold tracking-tight">
-          TREYFA
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="Treyfa" width={80} height={30} className="object-contain h-7 w-auto" />
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-foreground text-background font-medium">
             ADMIN
           </span>

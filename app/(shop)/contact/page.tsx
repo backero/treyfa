@@ -156,7 +156,7 @@ export default function ContactPage() {
         <AnimatedSection className="mt-12 md:mt-16">
           <div className="rounded-2xl overflow-hidden border border-border h-56 sm:h-64 md:h-72 lg:h-80">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.9!2d77.023!3d10.9689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDU4JzA4LjAiTiA3N8KwMDEnMjIuOCJF!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.1!2d77.132488!3d11.0276263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8554f5b09719b%3A0xeaf0709655cf575c!2sTreyfa!5e0!3m2!1sen!2sin!4v1713456789!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}

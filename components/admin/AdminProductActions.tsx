@@ -1,29 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { Product, Category } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ProductForm } from "./ProductForm";
 import { deleteProduct } from "@/actions/admin";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState } from "react";
 
 type Props = {
-  categories: Category[];
+  categories?: Category[];
   product?: Product;
 };
 
-export function AdminProductActions({ categories, product }: Props) {
+export function AdminProductActions({ product }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   async function handleDelete() {
@@ -40,53 +32,22 @@ export function AdminProductActions({ categories, product }: Props) {
   }
 
   if (!product) {
-    // Create button
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-1.5" /> Add Product
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Create Product</DialogTitle>
-          </DialogHeader>
-          <ProductForm
-            categories={categories}
-            onSuccess={() => {
-              setOpen(false);
-              router.refresh();
-            }}
-          />
-        </DialogContent>
-      </Dialog>
+      <Button size="sm" asChild>
+        <Link href="/admin/products/new">
+          <Plus className="h-4 w-4 mr-1.5" /> Add Product
+        </Link>
+      </Button>
     );
   }
 
   return (
     <div className="flex items-center gap-1">
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <Pencil className="h-3.5 w-3.5" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-          </DialogHeader>
-          <ProductForm
-            categories={categories}
-            product={product}
-            onSuccess={() => {
-              setOpen(false);
-              router.refresh();
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-
+      <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+        <Link href={`/admin/products/${product.id}/edit`}>
+          <Pencil className="h-3.5 w-3.5" />
+        </Link>
+      </Button>
       <Button
         variant="ghost"
         size="icon"

@@ -8,7 +8,7 @@ import { selectCartCount } from "@/store/cartSlice";
 import { selectWishlistCount } from "@/store/wishlistSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ShoppingCart, Heart, User, Menu, X, LogOut, Package, LayoutDashboard,
+  ShoppingCart, Heart, User, Menu, X, LogOut, Package, LayoutDashboard, ChevronDown,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
@@ -21,11 +21,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const categories = [
+  { href: "/products?category=hair-care",  label: "Hair Care"   },
+  { href: "/products?category=face-care",  label: "Face Care"   },
+  { href: "/products?category=bath-body",  label: "Bath & Body" },
+  { href: "/products",                      label: "All Products" },
+];
+
 const navLinks = [
-  { href: "/products", label: "Shop"    },
-  { href: "/about",    label: "About"   },
-  { href: "/blog",     label: "Blog"    },
-  { href: "/contact",  label: "Contact" },
+  { href: "/about",   label: "About"   },
+  { href: "/blog",    label: "Blog"    },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
@@ -97,6 +103,33 @@ export function Navbar() {
 
           {/* Nav links — visible sm+ */}
           <nav className="hidden sm:flex items-center gap-0.5">
+            {/* Shop dropdown */}
+            <div className="relative group">
+              <button
+                className={cn(
+                  "flex items-center gap-1 px-3 py-1.5 rounded-xl text-[13px] font-medium transition-all duration-150 whitespace-nowrap",
+                  pathname.startsWith("/products")
+                    ? "bg-black/[0.08] text-black"
+                    : "text-black/55 hover:text-black hover:bg-black/[0.05]"
+                )}
+              >
+                Shop <ChevronDown className="h-3 w-3 opacity-60 group-hover:rotate-180 transition-transform duration-200" />
+              </button>
+              <div className="absolute top-full left-0 pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-150">
+                <div className="bg-white border border-black/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-xl overflow-hidden min-w-[160px] py-1">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.href}
+                      href={cat.href}
+                      className="block px-4 py-2 text-[13px] text-black/60 hover:text-black hover:bg-black/[0.04] transition-colors"
+                    >
+                      {cat.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -228,12 +261,34 @@ export function Navbar() {
             >
               {/* Nav links */}
               <div className="p-2 space-y-0.5">
+                {/* Shop + categories */}
+                <p className="px-4 pt-2 pb-1 text-[10px] uppercase tracking-[0.3em] text-black/30 font-medium">Shop</p>
+                {categories.map((cat, i) => (
+                  <motion.div
+                    key={cat.href}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.2 }}
+                  >
+                    <Link
+                      href={cat.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center px-4 py-2.5 rounded-xl text-[14px] font-medium transition-colors"
+                      style={{ color: "#111111" }}
+                    >
+                      {cat.label}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <div style={{ height: "1px", backgroundColor: "#f0f0f0", margin: "4px 0" }} />
+
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.04, duration: 0.2 }}
+                    transition={{ delay: (categories.length + i) * 0.04, duration: 0.2 }}
                   >
                     <Link
                       href={link.href}
