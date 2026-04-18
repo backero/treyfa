@@ -14,6 +14,7 @@ import { BrandStory } from "@/components/shop/BrandStory";
 import { HorizontalProductScroll } from "@/components/shop/HorizontalProductScroll";
 import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
 import { BeforeAfterSection } from "@/components/shop/BeforeAfterSection";
+import { InstagramSection } from "@/components/shop/InstagramSection";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import type { Metadata } from "next";
 
@@ -150,7 +151,10 @@ export default function HomePage() {
       {/* 9. Testimonials */}
       <TestimonialsSection />
 
-      {/* 10. CTA Banner */}
+      {/* 10. Instagram */}
+      <InstagramSection />
+
+      {/* 11. CTA Banner */}
       <AnimatedSection className="py-20 container mx-auto px-4">
         <div className="relative rounded-3xl overflow-hidden bg-foreground text-background px-8 py-16 text-center">
           <div className="relative z-10">

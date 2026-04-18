@@ -74,7 +74,7 @@ export function Navbar() {
         {/* ── Pill bar ── */}
         <div
           className={cn(
-            "flex items-center gap-1.5 md:gap-2 rounded-full px-2 py-1.5 md:px-3 md:py-2 transition-all duration-300",
+            "flex items-center gap-1.5 md:gap-2 rounded-xl px-2 py-1.5 md:px-3 md:py-2 transition-all duration-300",
             scrolled
               ? "bg-white/95 backdrop-blur-xl border border-black/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
               : "bg-white/85 backdrop-blur-xl border border-black/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.08)]"
@@ -102,7 +102,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 whitespace-nowrap",
+                  "px-3 py-1.5 rounded-xl text-[13px] font-medium transition-all duration-150 whitespace-nowrap",
                   pathname === link.href
                     ? "bg-black/[0.08] text-black"
                     : "text-black/55 hover:text-black hover:bg-black/[0.05]"

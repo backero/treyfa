@@ -26,7 +26,7 @@ const ingredients = [
 
 export function IngredientShowcase() {
   return (
-    <section className="py-16 md:py-24 bg-[#0f0f0f] overflow-hidden">
+    <section className="py-16 md:py-24 overflow-hidden" style={{ background: "linear-gradient(145deg, #0a1f10 0%, #0d2b16 50%, #0a1a0c 100%)" }}>
       <div className="container mx-auto px-4">
         {/* Heading */}
         <motion.div

@@ -49,7 +49,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#0c1a0f] text-white">
+    <footer className="bg-white text-gray-900">
       {/* Main grid */}
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-10 lg:gap-8">
@@ -62,10 +62,10 @@ export function Footer() {
                 alt="Treyfa"
                 width={100}
                 height={40}
-                className="object-contain brightness-0 invert w-[90px] md:w-[110px] h-auto"
+                className="object-contain w-[90px] md:w-[110px] h-auto"
               />
             </Link>
-            <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-xs">
+            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
               India&apos;s natural &amp; herbal beauty brand. Rooted in South Indian Ayurvedic
               traditions, crafted for modern daily care.
             </p>
@@ -79,7 +79,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="h-10 w-10 flex items-center justify-center rounded-lg border border-white/10 text-white/50 hover:bg-white/10 hover:text-white transition-all duration-200"
+                  className="h-10 w-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -90,23 +90,23 @@ export function Footer() {
             <div className="mt-7 space-y-3">
               <a
                 href="tel:+919486500671"
-                className="flex items-start gap-2.5 text-sm text-white/50 hover:text-white transition-colors"
+                className="flex items-start gap-2.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
               >
                 <Phone className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
                 <span>+91 94865 00671 / +91 89034 12061</span>
               </a>
               <a
                 href="mailto:info@treyfa.in"
-                className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors"
+                className="flex items-center gap-2.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
               >
                 <Mail className="h-3.5 w-3.5 flex-shrink-0" />
                 info@treyfa.in
               </a>
-              <div className="flex items-start gap-2.5 text-sm text-white/50">
+              <div className="flex items-start gap-2.5 text-sm text-gray-500">
                 <MapPin className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
                 <span>42, Interflex Complex, Trichy Road, Sulur, Coimbatore — 641402</span>
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-white/50">
+              <div className="flex items-center gap-2.5 text-sm text-gray-500">
                 <Clock className="h-3.5 w-3.5 flex-shrink-0" />
                 Mon–Sat: 10AM – 6PM
               </div>
@@ -115,7 +115,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="col-span-1">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40 mb-4 md:mb-5">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400 mb-4 md:mb-5">
               Shop
             </h4>
             <ul className="space-y-3">
@@ -123,7 +123,7 @@ export function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
-                    className="text-sm text-white/55 hover:text-white transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
                   >
                     {label}
                   </Link>
@@ -134,7 +134,7 @@ export function Footer() {
 
           {/* Company */}
           <div className="col-span-1">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40 mb-4 md:mb-5">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400 mb-4 md:mb-5">
               Company
             </h4>
             <ul className="space-y-3">
@@ -142,7 +142,7 @@ export function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
-                    className="text-sm text-white/55 hover:text-white transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
                   >
                     {label}
                   </Link>
@@ -153,7 +153,7 @@ export function Footer() {
 
           {/* Policies */}
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40 mb-4 md:mb-5">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400 mb-4 md:mb-5">
               Policies
             </h4>
             <ul className="space-y-3">
@@ -161,7 +161,7 @@ export function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
-                    className="text-sm text-white/55 hover:text-white transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
                   >
                     {label}
                   </Link>
@@ -173,17 +173,17 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/8">
+      <div className="border-t border-gray-100">
         <div className="container mx-auto px-4 py-4 md:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/30 text-center sm:text-left">
+          <p className="text-xs text-gray-400 text-center sm:text-left">
             &copy; {new Date().getFullYear()} Treyfa Natural Care. All rights reserved.
           </p>
           <div className="flex items-center gap-1.5 flex-wrap justify-center">
-            <span className="text-xs text-white/30">We accept</span>
+            <span className="text-xs text-gray-400">We accept</span>
             {["Visa", "MC", "UPI", "Razorpay"].map((m) => (
               <span
                 key={m}
-                className="px-2 py-0.5 rounded text-[10px] font-medium border border-white/10 text-white/40"
+                className="px-2 py-0.5 rounded text-[10px] font-medium border border-gray-200 text-gray-400"
               >
                 {m}
               </span>

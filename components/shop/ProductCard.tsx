@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { ProductWithCategory } from "@/types";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
@@ -35,30 +29,6 @@ export function ProductCard({ product }: Props) {
   const prefersReducedMotion = useReducedMotion();
 
   const discount = calculateDiscount(product.price, product.comparePrice ?? 0);
-
-  // 3D tilt motion values
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-80, 80], [8, -8]), {
-    stiffness: 200,
-    damping: 25,
-  });
-  const rotateY = useSpring(useTransform(mouseX, [-80, 80], [-8, 8]), {
-    stiffness: 200,
-    damping: 25,
-  });
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (prefersReducedMotion) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left - rect.width / 2);
-    mouseY.set(e.clientY - rect.top - rect.height / 2);
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
 
   async function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
@@ -120,26 +90,15 @@ export function ProductCard({ product }: Props) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={
-        prefersReducedMotion
-          ? {}
-          : { rotateX, rotateY, transformPerspective: 1000, transformStyle: "preserve-3d" }
-      }
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       className="group relative"
     >
       <Link href={`/product/${product.slug}`} className="block">
         {/* Image container */}
-        <motion.div
-          whileHover={{ y: -6 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-secondary shadow-sm group-hover:shadow-xl transition-shadow duration-500"
-        >
+        <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-secondary shadow-sm group-hover:shadow-md transition-shadow duration-400">
           {product.images[0] && (
             <Image
               src={product.images[0]}
@@ -193,9 +152,7 @@ export function ProductCard({ product }: Props) {
             </Button>
           </div>
 
-          {/* Shimmer edge on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl ring-1 ring-inset ring-white/20" />
-        </motion.div>
+        </div>
 
         {/* Product info */}
         <div className="mt-3 space-y-1 px-0.5">

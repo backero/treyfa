@@ -15,7 +15,15 @@
       "WebFetch(domain:treyfa.in)",
       "WebFetch(domain:lumier.framer.website)",
       "Bash(node *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(npx prisma *)",
+      "Read(//c/Users/ADMIN/.claude/skills/webapp-testing/**)",
+      "Bash(python scripts/with_server.py --help)",
+      "Bash(playwright install *)",
+      "WebFetch(domain:www.instagram.com)",
+      "WebFetch(domain:share.google)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:maps.app.goo.gl)"
     ]
   }
 }
