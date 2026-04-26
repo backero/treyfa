@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { AdminProductActions } from "@/components/admin/AdminProductActions";
 import { Pagination } from "@/components/admin/Pagination";
 import Image from "next/image";
+import { Package } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Product Management" };
@@ -95,8 +96,12 @@ export default async function AdminProductsPage({
           </tbody>
         </table>
         {products.length === 0 && (
-          <div className="py-16 text-center">
-            <p className="text-sm text-muted-foreground">No products found. Add your first product.</p>
+          <div className="py-20 flex flex-col items-center gap-3 text-center">
+            <div className="h-14 w-14 rounded-full bg-secondary flex items-center justify-center">
+              <Package className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-medium text-sm">No products yet</p>
+            <p className="text-xs text-muted-foreground max-w-xs">Add your first product to start selling.</p>
           </div>
         )}
         <Pagination page={currentPage} totalPages={totalPages} total={total} />

@@ -8,6 +8,12 @@ import { cn } from "@/lib/utils";
 
 const ZOOM = 3;
 
+// Builds a Next.js /_next/image URL so the zoom panel benefits from
+// server-side optimization and caching at high resolution.
+function nextImageUrl(src: string, width: number, quality = 95): string {
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+}
+
 type Props = { images: string[]; alt: string };
 
 export function ImageGallery({ images, alt }: Props) {
@@ -60,8 +66,9 @@ export function ImageGallery({ images, alt }: Props) {
                 src={currentSrc}
                 alt={`${alt} ${selectedIndex + 1}`}
                 fill
+                quality={92}
                 className="object-cover"
-                sizes="(max-width:768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 60vw"
                 priority={selectedIndex === 0}
               />
             )}
@@ -113,13 +120,11 @@ export function ImageGallery({ images, alt }: Props) {
               /* same height as the aspect-square image */
               width:  "100%",
               aspectRatio: "1 / 1",
-              backgroundImage:    `url(${currentSrc})`,
+              backgroundImage:    `url(${nextImageUrl(currentSrc, 1920, 95)})`,
               backgroundSize:     `${ZOOM * 100}% ${ZOOM * 100}%`,
               backgroundPosition: `${cx * 100}% ${cy * 100}%`,
               backgroundRepeat:   "no-repeat",
               backgroundColor:    "#f5f5f5",
-              /* tabs / product detail underneath remain visible  */
-              /* user moves mouse off image to interact with them */
               pointerEvents: "none",
             }}
           />
@@ -144,6 +149,7 @@ export function ImageGallery({ images, alt }: Props) {
                 src={img}
                 alt={`${alt} thumbnail ${i + 1}`}
                 fill
+                quality={80}
                 className="object-cover"
                 sizes="64px"
               />

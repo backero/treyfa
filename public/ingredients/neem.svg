@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" fill="none">
+  <defs>
+    <radialGradient id="neemBg" cx="50%" cy="55%" r="50%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#052e16" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="leaf1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <linearGradient id="leaf2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+    <linearGradient id="leaf3" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Soft ambient glow -->
+  <ellipse cx="150" cy="175" rx="110" ry="105" fill="url(#neemBg)"/>
+
+  <!-- Central stem -->
+  <path d="M150 295 L150 50" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Bottom leaf pair -->
+  <ellipse cx="112" cy="268" rx="36" ry="14" fill="url(#leaf1)" transform="rotate(-28 112 268)"/>
+  <line x1="150" y1="268" x2="115" y2="265" stroke="#86efac" stroke-width="1" opacity="0.45"/>
+
+  <ellipse cx="188" cy="268" rx="36" ry="14" fill="url(#leaf2)" transform="rotate(28 188 268)"/>
+  <line x1="150" y1="268" x2="185" y2="265" stroke="#86efac" stroke-width="1" opacity="0.45"/>
+
+  <!-- Second leaf pair -->
+  <ellipse cx="104" cy="228" rx="38" ry="14" fill="url(#leaf2)" transform="rotate(-32 104 228)"/>
+  <line x1="150" y1="228" x2="107" y2="224" stroke="#86efac" stroke-width="1" opacity="0.4"/>
+
+  <ellipse cx="196" cy="228" rx="38" ry="14" fill="url(#leaf1)" transform="rotate(32 196 228)"/>
+  <line x1="150" y1="228" x2="193" y2="224" stroke="#86efac" stroke-width="1" opacity="0.4"/>
+
+  <!-- Third leaf pair -->
+  <ellipse cx="100" cy="186" rx="36" ry="13" fill="url(#leaf3)" transform="rotate(-35 100 186)"/>
+  <line x1="150" y1="186" x2="103" y2="182" stroke="#86efac" stroke-width="1" opacity="0.4"/>
+
+  <ellipse cx="200" cy="186" rx="36" ry="13" fill="url(#leaf2)" transform="rotate(35 200 186)"/>
+  <line x1="150" y1="186" x2="197" y2="182" stroke="#86efac" stroke-width="1" opacity="0.4"/>
+
+  <!-- Fourth leaf pair -->
+  <ellipse cx="105" cy="145" rx="34" ry="12" fill="url(#leaf1)" transform="rotate(-38 105 145)"/>
+  <line x1="150" y1="145" x2="108" y2="141" stroke="#86efac" stroke-width="1" opacity="0.35"/>
+
+  <ellipse cx="195" cy="145" rx="34" ry="12" fill="url(#leaf3)" transform="rotate(38 195 145)"/>
+  <line x1="150" y1="145" x2="192" y2="141" stroke="#86efac" stroke-width="1" opacity="0.35"/>
+
+  <!-- Fifth leaf pair -->
+  <ellipse cx="112" cy="108" rx="30" ry="11" fill="url(#leaf2)" transform="rotate(-40 112 108)"/>
+  <ellipse cx="188" cy="108" rx="30" ry="11" fill="url(#leaf1)" transform="rotate(40 188 108)"/>
+
+  <!-- Terminal leaflet at top -->
+  <ellipse cx="150" cy="68" rx="16" ry="28" fill="url(#leaf3)"/>
+  <line x1="150" y1="55" x2="150" y2="90" stroke="#86efac" stroke-width="1" opacity="0.5"/>
+</svg>

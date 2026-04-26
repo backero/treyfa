@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { AdminCategoryActions } from "@/components/admin/AdminCategoryActions";
 import { Badge } from "@/components/ui/badge";
+import { Tag } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Category Management" };
@@ -60,8 +61,12 @@ export default async function AdminCategoriesPage() {
           </tbody>
         </table>
         {categories.length === 0 && (
-          <div className="py-16 text-center">
-            <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
+          <div className="py-20 flex flex-col items-center gap-3 text-center">
+            <div className="h-14 w-14 rounded-full bg-secondary flex items-center justify-center">
+              <Tag className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-medium text-sm">No categories yet</p>
+            <p className="text-xs text-muted-foreground max-w-xs">Add your first category to organise products.</p>
           </div>
         )}
       </div>

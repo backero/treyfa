@@ -12,6 +12,7 @@ import { BrandStory } from "@/components/shop/BrandStory";
 import { HorizontalProductScroll } from "@/components/shop/HorizontalProductScroll";
 import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
 import { BeforeAfterSection } from "@/components/shop/BeforeAfterSection";
+import { AwardsSection } from "@/components/shop/AwardsSection";
 import { InstagramSection } from "@/components/shop/InstagramSection";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import type { Metadata } from "next";
@@ -63,18 +64,21 @@ export default function HomePage() {
       {/* 2. Trust bar */}
       <FeaturesBar />
 
-      {/* 3. Ingredient storytelling */}
+      {/* 3. Social proof — shown early to build trust above the fold */}
+      <TestimonialsSection />
+
+      {/* 4. Ingredient storytelling */}
       <IngredientShowcase />
 
-      {/* 4. Brand story */}
+      {/* 5. Brand story */}
       <BrandStory />
 
-      {/* 5. Horizontal scroll product showcase */}
+      {/* 6. Horizontal scroll product showcase */}
       <Suspense fallback={null}>
         <ProductScrollSection />
       </Suspense>
 
-      {/* 6. Featured products grid */}
+      {/* 7. Featured products grid */}
       <AnimatedSection className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
@@ -104,16 +108,16 @@ export default function HomePage() {
         </div>
       </AnimatedSection>
 
-      {/* 7. Before & After */}
+      {/* 8. Before & After results */}
       <BeforeAfterSection />
 
-      {/* 8. Testimonials */}
-      <TestimonialsSection />
+      {/* 9. Awards & recognition */}
+      <AwardsSection />
 
-      {/* 9. Instagram */}
+      {/* 10. Instagram */}
       <InstagramSection />
 
-      {/* 10. CTA Banner */}
+      {/* 11. CTA Banner */}
       <AnimatedSection className="py-20 container mx-auto px-4">
         <div className="relative rounded-3xl overflow-hidden bg-foreground text-background px-8 py-16 text-center">
           <div className="relative z-10">

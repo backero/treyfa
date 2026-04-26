@@ -13,6 +13,7 @@ import {
   LogOut,
   ChevronRight,
   Store,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/admin/categories", icon: Tag, label: "Categories" },
   { href: "/admin/orders", icon: ShoppingBag, label: "Orders" },
   { href: "/admin/customers", icon: Users, label: "Customers" },
+  { href: "/admin/blogs", icon: BookOpen, label: "Blog" },
 ];
 
 export function AdminNav() {

@@ -4,36 +4,116 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 const testimonials = [
-  { name: "Priya K.",   location: "Chennai",    rating: 5, text: "The Neem Shampoo is incredible! Dandruff reduced significantly after just two weeks.",                             product: "Neem Anti-Dandruff Shampoo" },
-  { name: "Rahul M.",   location: "Bengaluru",  rating: 5, text: "Switched to the Turmeric Face Wash and never looking back. Skin looks brighter instantly.",                       product: "Turmeric Foaming Face Wash" },
-  { name: "Sneha T.",   location: "Coimbatore", rating: 5, text: "Pure Virgin Coconut Oil is exactly as described — pure. Hair growth improved noticeably.",                        product: "Pure Virgin Vetiver Coconut Oil" },
-  { name: "Arjun S.",   location: "Mumbai",     rating: 5, text: "Choco Coffee Face Wash became my daily essential. Texture is amazing and skin stays soft all day.",               product: "Choco Coffee Face Wash" },
-  { name: "Deepa R.",   location: "Hyderabad",  rating: 5, text: "Treyfa is genuinely doing something different. South Indian herbal remedies in modern packaging.",                product: "Neem Face Wash" },
-  { name: "Vikram N.",  location: "Pune",       rating: 5, text: "Fast delivery, beautiful packaging. Turmeric Shampoo left my hair shiny after the very first wash.",              product: "Turmeric Shampoo + Conditioner" },
-  { name: "Meera L.",   location: "Kochi",      rating: 5, text: "I've tried so many herbal brands and Treyfa stands apart. Ingredients are genuinely clean.",                     product: "Neem Shampoo" },
-  { name: "Sanjay P.",  location: "Delhi",      rating: 5, text: "My wife started using the Hibiscus range and her hair fall has reduced dramatically. We're now loyal customers.", product: "Hibiscus Shampoo & Conditioner" },
-  { name: "Anjali B.",  location: "Mysuru",     rating: 5, text: "Basil Heaven Heal Oil is unlike anything else. Scalp feels cool and nourished. Zero greasiness.",                product: "Basil Heaven Heal Oil" },
-  { name: "Ravi S.",    location: "Ahmedabad",  rating: 5, text: "The Curry Leaves Hair Oil is a gem. Roots strengthened, breakage gone. Been using for 3 months.",                product: "Curry Leaves Hair Oil" },
+  {
+    name: "Dharshana",
+    rating: 5,
+    text: "Neem shampoo reduces dandruff within a few washes. Makes scalp feel clean and fresh without any dryness.",
+    product: "Neem Anti-Dandruff Shampoo",
+  },
+  {
+    name: "Dharshini",
+    rating: 5,
+    text: "Had constant itching due to dandruff, but scalp feels calm now. Hair feels soft after every wash.",
+    product: "Neem Anti-Dandruff Shampoo",
+  },
+  {
+    name: "Dharsha",
+    rating: 5,
+    text: "Herbal neem formula controls flakes well and doesn't feel harsh. Hair looks healthier and smoother.",
+    product: "Neem Anti-Dandruff Shampoo",
+  },
+  {
+    name: "Gopinath",
+    rating: 5,
+    text: "Completely cured dandruff within the shortest time. I've tried many products — this one actually works.",
+    product: "Neem Anti-Dandruff Shampoo",
+  },
+  {
+    name: "Naveen",
+    rating: 5,
+    text: "Neem formula works great for itchy scalp. Feels very refreshing after wash. Will continue using.",
+    product: "Neem Anti-Dandruff Shampoo",
+  },
+  {
+    name: "Sagaya Mary",
+    rating: 5,
+    text: "I use this product daily. Got super long hair within a few weeks. It's genuinely the best product I've used.",
+    product: "Turmeric Shampoo + Conditioner",
+  },
+  {
+    name: "Chithra",
+    rating: 5,
+    text: "It strengthens my hair from the roots and reduces the breakage problem. Visible difference within weeks.",
+    product: "Turmeric Shampoo + Conditioner",
+  },
+  {
+    name: "Kumaravel",
+    rating: 5,
+    text: "It helps to strengthen my hair from the roots and grow long with shine. Amazing herbal formula.",
+    product: "Turmeric Shampoo + Conditioner",
+  },
+  {
+    name: "Kowsalya",
+    rating: 5,
+    text: "Gives a visible hair growth result — removed hair-fall and increased my hair growth within 2 months.",
+    product: "Virgin Coconut Vetiver Hair Oil",
+  },
+  {
+    name: "Mohan",
+    rating: 5,
+    text: "While applying the oil it gives the feel of natural cooling effect, which gives a superb vibe. Love it.",
+    product: "Virgin Coconut Vetiver Hair Oil",
+  },
+  {
+    name: "MSC Emil Joshua",
+    rating: 5,
+    text: "Basil Heaven Heal Oil is a wonderful addition to my self-care routine. Works beautifully as both a hair oil and a body moisturizer.",
+    product: "Basil Heaven Heal Oil",
+  },
+  {
+    name: "Elumalai",
+    rating: 5,
+    text: "I like that it's herbal and free from harsh chemicals. Nourishes deeply and gives a natural glow to the skin.",
+    product: "Basil Heaven Heal Oil",
+  },
+  {
+    name: "Sathya",
+    rating: 5,
+    text: "It removes the oil from my face and changes it into brightness. Skin looks radiant after every use.",
+    product: "Neem Face Wash",
+  },
+  {
+    name: "Barani",
+    rating: 5,
+    text: "It reduces pimples and breakouts superbly. I was struggling for months — this solved it in two weeks.",
+    product: "Neem Face Wash",
+  },
 ];
 
-const row1 = testimonials.slice(0, 5);
-const row2 = testimonials.slice(5);
+const row1 = testimonials.slice(0, 7);
+const row2 = testimonials.slice(7);
 
-function TestimonialCard({ name, location, rating, text, product }: typeof testimonials[0]) {
+function TestimonialCard({
+  name,
+  rating,
+  text,
+  product,
+}: (typeof testimonials)[0]) {
   return (
-    <div className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] rounded-2xl border border-border bg-background p-4 sm:p-5 flex flex-col gap-3 mx-2 sm:mx-2.5">
+    <div className="flex-shrink-0 w-[270px] sm:w-[310px] md:w-[350px] rounded-2xl border border-border bg-background p-4 sm:p-5 flex flex-col gap-3 mx-2 sm:mx-2.5">
       <div className="flex gap-0.5">
         {Array.from({ length: rating }).map((_, i) => (
           <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
         ))}
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed flex-1">&ldquo;{text}&rdquo;</p>
+      <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+        &ldquo;{text}&rdquo;
+      </p>
       <div className="pt-2 border-t border-border flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold truncate">{name}</p>
-          <p className="text-[10px] text-muted-foreground">{location}</p>
-        </div>
-        <p className="text-[10px] text-muted-foreground text-right max-w-[110px] leading-tight flex-shrink-0">{product}</p>
+        <p className="text-xs font-semibold truncate">{name}</p>
+        <p className="text-[10px] text-muted-foreground text-right max-w-[130px] leading-tight flex-shrink-0">
+          {product}
+        </p>
       </div>
     </div>
   );
@@ -51,14 +131,15 @@ export function TestimonialsSection() {
         className="text-center mb-10 md:mb-12 px-4"
       >
         <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-3">
-          What Customers Say
+          Real Reviews from Treyfa.in
         </p>
-        <h2 className="text-3xl md:text-4xl font-bold">
-          Loved by Thousands
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-bold">Loved by Thousands</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Genuine reviews from verified buyers on our store
+        </p>
       </motion.div>
 
-      {/* Marquee wrapper — pause-on-hover applied to the outer div */}
+      {/* Marquee rows */}
       <div className="marquee-pause space-y-4">
         {/* Row 1 — scrolls left */}
         <div className="overflow-hidden">

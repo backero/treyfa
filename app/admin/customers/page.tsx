@@ -1,7 +1,7 @@
 import { getAllCustomers } from "@/actions/admin";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
-import { User } from "lucide-react";
+import { User, Users } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Customer Management" };
@@ -66,7 +66,13 @@ export default async function AdminCustomersPage() {
           </tbody>
         </table>
         {result.items.length === 0 && (
-          <div className="py-12 text-center text-muted-foreground">No customers yet</div>
+          <div className="py-20 flex flex-col items-center gap-3 text-center">
+            <div className="h-14 w-14 rounded-full bg-secondary flex items-center justify-center">
+              <Users className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-medium text-sm">No customers yet</p>
+            <p className="text-xs text-muted-foreground max-w-xs">Customers who sign up will appear here.</p>
+          </div>
         )}
       </div>
     </div>

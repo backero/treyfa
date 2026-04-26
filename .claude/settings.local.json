@@ -23,7 +23,13 @@
       "WebFetch(domain:www.instagram.com)",
       "WebFetch(domain:share.google)",
       "WebFetch(domain:www.google.com)",
-      "WebFetch(domain:maps.app.goo.gl)"
+      "WebFetch(domain:maps.app.goo.gl)",
+      "Bash(cp \"D:/Development/Internal/backro-landing-page/public/achievements/excellence-award.png\" \"D:/Development/Internal/treyfa/public/awards/excellence-award.png\")",
+      "Bash(cp \"D:/Development/Internal/backro-landing-page/public/achievements/trusted-brand-award.png\" \"D:/Development/Internal/treyfa/public/awards/trusted-brand-award.png\")",
+      "Bash(mkdir -p \"D:/Development/Internal/treyfa/public/awards\")",
+      "Bash(mkdir -p \"D:/Development/Internal/treyfa/public/ingredients\")",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(npx tsx *)"
     ]
   }
 }

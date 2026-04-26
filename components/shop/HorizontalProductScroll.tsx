@@ -118,8 +118,9 @@ export function HorizontalProductScroll({ products }: Props) {
                     src={product.images[0]}
                     alt={product.name}
                     fill
+                    quality={90}
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.07]"
-                    sizes="320px"
+                    sizes="(max-width: 768px) 240px, 320px"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-muted" />

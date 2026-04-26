@@ -3,6 +3,7 @@ import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
+import { ShoppingBag } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Order Management" };
@@ -81,6 +82,15 @@ export default async function AdminOrdersPage({
             })}
           </tbody>
         </table>
+        {result.items.length === 0 && (
+          <div className="py-20 flex flex-col items-center gap-3 text-center">
+            <div className="h-14 w-14 rounded-full bg-secondary flex items-center justify-center">
+              <ShoppingBag className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-medium text-sm">No orders yet</p>
+            <p className="text-xs text-muted-foreground max-w-xs">Orders placed by customers will appear here.</p>
+          </div>
+        )}
       </div>
     </div>
   );

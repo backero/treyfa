@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+  <defs>
+    <radialGradient id="cBg" cx="50%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#78350f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="outerShell" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#a16207"/>
+      <stop offset="50%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#431407"/>
+    </radialGradient>
+    <radialGradient id="innerFlesh" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fefce8"/>
+      <stop offset="70%" stop-color="#fef9c3"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </radialGradient>
+    <radialGradient id="cavity" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </radialGradient>
+    <linearGradient id="palmStem" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient glow -->
+  <ellipse cx="150" cy="175" rx="115" ry="100" fill="url(#cBg)"/>
+
+  <!-- Whole coconut (right, slightly behind) -->
+  <ellipse cx="210" cy="175" rx="52" ry="58" fill="url(#outerShell)" opacity="0.85"/>
+  <!-- Fiber lines on whole coconut -->
+  <path d="M185 135 Q195 175 185 215" fill="none" stroke="#92400e" stroke-width="1.5" opacity="0.35"/>
+  <path d="M200 128 Q212 175 200 222" fill="none" stroke="#92400e" stroke-width="1.5" opacity="0.35"/>
+  <path d="M218 128 Q228 175 218 222" fill="none" stroke="#451a03" stroke-width="1.2" opacity="0.3"/>
+  <!-- Three "eyes" / seams -->
+  <circle cx="210" cy="155" r="4" fill="#451a03"/>
+  <circle cx="224" cy="162" r="3" fill="#451a03"/>
+  <circle cx="198" cy="163" r="3" fill="#451a03"/>
+
+  <!-- Coconut half (left, foreground) — cross-section view -->
+  <!-- Outer shell rim (dome from above) -->
+  <ellipse cx="115" cy="185" rx="70" ry="72" fill="url(#outerShell)"/>
+  <!-- Fiber texture on outer shell -->
+  <ellipse cx="115" cy="185" rx="70" ry="72" fill="none" stroke="#92400e" stroke-width="2.5" opacity="0.25"/>
+  <path d="M75 145 Q95 185 75 225" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.3"/>
+  <path d="M100 137 Q115 185 100 233" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.3"/>
+  <path d="M130 137 Q143 185 130 233" fill="none" stroke="#451a03" stroke-width="1.2" opacity="0.25"/>
+  <path d="M155 145 Q163 185 155 225" fill="none" stroke="#451a03" stroke-width="1.2" opacity="0.25"/>
+
+  <!-- White flesh ring -->
+  <ellipse cx="115" cy="185" rx="57" ry="59" fill="url(#innerFlesh)"/>
+
+  <!-- Coconut water cavity -->
+  <ellipse cx="115" cy="185" rx="33" ry="34" fill="url(#cavity)"/>
+
+  <!-- Soft sheen on flesh -->
+  <ellipse cx="100" cy="168" rx="20" ry="10" fill="white" opacity="0.12" transform="rotate(-20 100 168)"/>
+
+  <!-- Center point -->
+  <circle cx="115" cy="185" r="5" fill="#d97706" opacity="0.5"/>
+
+  <!-- Cut edge highlight -->
+  <ellipse cx="115" cy="185" rx="57" ry="59" fill="none" stroke="#fef9c3" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Palm frond accent at top -->
+  <line x1="150" y1="60" x2="150" y2="112" stroke="url(#palmStem)" stroke-width="4" stroke-linecap="round"/>
+  <!-- Left frond -->
+  <path d="M150 75 C130 60 100 55 88 68" fill="none" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M150 75 C135 65 118 68 112 80" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <!-- Left leaflets -->
+  <ellipse cx="100" cy="63" rx="14" ry="5" fill="#4ade80" transform="rotate(-35 100 63)" opacity="0.85"/>
+  <ellipse cx="120" cy="58" rx="13" ry="5" fill="#22c55e" transform="rotate(-25 120 58)" opacity="0.8"/>
+
+  <!-- Right frond -->
+  <path d="M150 75 C170 60 200 55 212 68" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M150 75 C165 65 182 68 188 80" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <!-- Right leaflets -->
+  <ellipse cx="200" cy="63" rx="14" ry="5" fill="#22c55e" transform="rotate(35 200 63)" opacity="0.85"/>
+  <ellipse cx="180" cy="58" rx="13" ry="5" fill="#4ade80" transform="rotate(25 180 58)" opacity="0.8"/>
+
+  <!-- Top leaf -->
+  <ellipse cx="150" cy="50" rx="10" ry="4" fill="#22c55e" opacity="0.8"/>
+</svg>
