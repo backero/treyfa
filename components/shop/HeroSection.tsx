@@ -271,8 +271,10 @@ export function HeroSection() {
                   alt={slide.alt}
                   width={300}
                   height={520}
+                  sizes="(min-width: 1024px) 289px, (min-width: 768px) 242px, (min-width: 640px) 208px, 173px"
                   className="h-full w-auto object-contain drop-shadow-[0_20px_44px_rgba(0,0,0,0.12)]"
                   priority={current === 0}
+                  fetchPriority={current === 0 ? "high" : undefined}
                 />
               </motion.div>
             </motion.div>

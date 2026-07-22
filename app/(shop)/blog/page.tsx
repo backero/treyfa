@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Journal — Treyfa",
   description: "Herbal beauty guides, ingredient deep-dives, and expert tips for your skin and hair.",
+  alternates: { canonical: "/blog" },
 };
 
 export default async function BlogPage() {

@@ -9,11 +9,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Shop All Products",
-  description: "Browse our full collection of premium products.",
-};
-
 type SearchParams = {
   search?: string;
   category?: string;
@@ -22,6 +17,41 @@ type SearchParams = {
   maxPrice?: string;
   page?: string;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}): Promise<Metadata> {
+  const { category: categorySlug, search } = await searchParams;
+
+  // Search-query pages are unbounded thin content — keep them out of the index.
+  if (search) {
+    return {
+      title: `Search results for "${search}"`,
+      robots: { index: false, follow: true },
+    };
+  }
+
+  if (categorySlug) {
+    const categories = await getCategories().catch(() => []);
+    const category = categories.find((c) => c.slug === categorySlug);
+    if (category) {
+      return {
+        title: `${category.name} — Herbal ${category.name} Products`,
+        description: `Shop Treyfa's ${category.name.toLowerCase()} range — natural, herbal, chemical-free and cruelty-free. Free shipping over ₹999.`,
+        alternates: { canonical: `/products?category=${category.slug}` },
+      };
+    }
+  }
+
+  return {
+    title: "Shop All Products — Herbal Shampoo, Face Wash, Hair Oil & More",
+    description:
+      "Browse Treyfa's full range of natural herbal beauty products — neem shampoo, turmeric face wash, hibiscus conditioner, hair oils and body care, all chemical-free and cruelty-free.",
+    alternates: { canonical: "/products" },
+  };
+}
 
 async function ProductGrid({ searchParams }: { searchParams: SearchParams }) {
   const page = parseInt(searchParams.page ?? "1");

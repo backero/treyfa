@@ -5,7 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { JsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
 
 export async function generateMetadata({
   params,
@@ -18,6 +21,7 @@ export async function generateMetadata({
   return {
     title: blog.title,
     description: blog.excerpt,
+    alternates: { canonical: `/blog/${blog.slug}` },
     openGraph: blog.coverImage
       ? { images: [{ url: blog.coverImage }] }
       : undefined,
@@ -45,8 +49,26 @@ export default async function BlogDetailPage({
     year: "numeric",
   });
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: blog.title,
+    description: blog.excerpt,
+    image: blog.coverImage ? [blog.coverImage] : undefined,
+    datePublished: blog.publishedAt,
+    dateModified: blog.updatedAt,
+    author: { "@type": "Organization", name: "Treyfa" },
+    publisher: {
+      "@type": "Organization",
+      name: "Treyfa",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}/blog/${blog.slug}`,
+  };
+
   return (
     <PageTransition>
+      <JsonLd data={articleJsonLd} />
       {/* Cover image hero */}
       {blog.coverImage && (
         <div className="relative w-full h-[40vh] md:h-[50vh] bg-secondary">

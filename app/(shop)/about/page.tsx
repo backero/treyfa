@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About Us",
   description: "Learn about Treyfa — India's natural & herbal beauty brand rooted in South Indian herbal traditions.",
+  alternates: { canonical: "/about" },
 };
 
 const values = [

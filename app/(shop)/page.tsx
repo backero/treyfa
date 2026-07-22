@@ -18,8 +18,9 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Treyfa — Premium Natural Skincare",
-  description: "Discover curated natural skincare products. Powered by Neem, Turmeric & Coconut.",
+  title: "Treyfa — Natural Herbal Shampoo, Face Wash & Hair Oil Online",
+  description:
+    "Shop Treyfa's natural herbal skincare and hair care — neem shampoo, turmeric face wash, hibiscus conditioner & more. Chemical-free, cruelty-free, made in India. Free shipping over ₹999.",
 };
 
 async function FeaturedProducts() {

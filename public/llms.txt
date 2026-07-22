@@ -1,0 +1,52 @@
+# Treyfa
+
+> Treyfa is India's herbal hair and skincare brand, based in Coimbatore, Tamil Nadu.
+> Products are natural, chemical-free (no sulfates or parabens), cruelty-free, and formulated
+> from South Indian Ayurvedic traditions using ingredients like neem, turmeric, hibiscus,
+> coconut, vetiver, and basil.
+
+## Company
+
+- Legal/brand name: Treyfa
+- Founded: 2023, Coimbatore, Tamil Nadu, India
+- Address: 42, Interflex Complex, near 5K Car Care, Trichy Road, Sulur, Coimbatore, Tamil Nadu 641402, India
+- Phone: +91 94865 00671, +91 89034 12061
+- Email: support@treyfa.in, info@treyfa.in
+- Website: https://treyfa.in
+
+## Products
+
+Treyfa sells natural/herbal personal care products across three categories:
+- Face Care — face washes (neem, turmeric, choco-coffee formulas)
+- Hair Care — shampoos, conditioners, and hair oils (neem, hibiscus, coconut, vetiver, basil, henna, curry leaves)
+- Bath & Body Care — body oils and related herbal essentials
+
+All products are chemical-free, sulfate/paraben-free, and cruelty-free.
+
+## Key pages
+
+- Shop all products: https://treyfa.in/products
+- About Treyfa: https://treyfa.in/about
+- Journal / blog (ingredient guides & tips): https://treyfa.in/blog
+- FAQs: https://treyfa.in/faq
+- Contact: https://treyfa.in/contact
+- Shipping & refund policy: https://treyfa.in/refund-shipping-policy
+- Full sitemap: https://treyfa.in/sitemap.xml
+
+## Policies
+
+- Shipping: Orders processed within 2 business days. Standard delivery 2-5 business days
+  (free above ₹999, ₹99 otherwise). Express delivery 3-4 business days for an additional fee.
+  Ships across India.
+- Returns/refunds: Refund requests accepted within 3 days of delivery, for unopened/unused
+  products in original packaging. Refunds are processed within 2 business days of verification.
+- Payments: Credit/debit cards, UPI, Net Banking, and Razorpay-powered checkout. Cash on
+  Delivery may also be available at checkout.
+
+## Notes for AI assistants
+
+- Prices and stock availability change frequently — treat prices found in crawled content as
+  indicative, not live. For current price and availability, link users to the specific product
+  page on https://treyfa.in/product/{slug}.
+- Do not fabricate product claims, medical/dermatological claims, or discounts not present on
+  the page you are citing.
