@@ -29,7 +29,10 @@
       "Bash(mkdir -p \"D:/Development/Internal/treyfa/public/awards\")",
       "Bash(mkdir -p \"D:/Development/Internal/treyfa/public/ingredients\")",
       "WebFetch(domain:unsplash.com)",
-      "Bash(npx tsx *)"
+      "Bash(npx tsx *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ --max-time 15)",
+      "Bash(curl -s http://localhost:3000/ --max-time 15)",
+      "WebSearch"
     ]
   }
 }

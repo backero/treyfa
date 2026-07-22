@@ -40,6 +40,7 @@ export async function createOrder(addressId: string): Promise<ActionResult<{ raz
       shipping,
       tax,
       total,
+      paymentMethod: "RAZORPAY",
       razorpayOrderId: razorpayOrder.id,
       items: {
         create: cartItems.map((item) => ({
@@ -63,6 +64,126 @@ export async function createOrder(addressId: string): Promise<ActionResult<{ raz
       orderId: order.id,
     },
   };
+}
+
+export async function createCodOrder(addressId: string): Promise<ActionResult<{ orderId: string }>> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const cartItems = await prisma.cartItem.findMany({
+    where: { userId: session.user.id },
+    include: { product: true },
+  });
+
+  if (cartItems.length === 0) {
+    return { success: false, error: "Cart is empty" };
+  }
+
+  const address = await prisma.address.findUnique({ where: { id: addressId, userId: session.user.id } });
+  if (!address) return { success: false, error: "Address not found" };
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
+  const total = subtotal + shipping + tax;
+
+  const order = await prisma.order.create({
+    data: {
+      userId: session.user.id,
+      addressId,
+      subtotal,
+      shipping,
+      tax,
+      total,
+      status: "CONFIRMED",
+      paymentStatus: "PENDING",
+      paymentMethod: "COD",
+      items: {
+        create: cartItems.map((item) => ({
+          productId: item.productId,
+          name: item.product.name,
+          image: item.product.images[0] ?? "",
+          price: item.product.price,
+          quantity: item.quantity,
+          size: item.size ?? undefined,
+          color: item.color ?? undefined,
+        })),
+      },
+    },
+  });
+
+  await prisma.$transaction([
+    ...cartItems.map((item) =>
+      prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      })
+    ),
+    prisma.cartItem.deleteMany({ where: { userId: session.user.id } }),
+  ]);
+
+  revalidatePath("/orders");
+  return { success: true, data: { orderId: order.id } };
+}
+
+export async function createUpiOrder(addressId: string): Promise<ActionResult<{ orderId: string; amount: number }>> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const cartItems = await prisma.cartItem.findMany({
+    where: { userId: session.user.id },
+    include: { product: true },
+  });
+
+  if (cartItems.length === 0) {
+    return { success: false, error: "Cart is empty" };
+  }
+
+  const address = await prisma.address.findUnique({ where: { id: addressId, userId: session.user.id } });
+  if (!address) return { success: false, error: "Address not found" };
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
+  const total = subtotal + shipping + tax;
+
+  const order = await prisma.order.create({
+    data: {
+      userId: session.user.id,
+      addressId,
+      subtotal,
+      shipping,
+      tax,
+      total,
+      status: "PENDING",
+      paymentStatus: "PENDING",
+      paymentMethod: "UPI",
+      items: {
+        create: cartItems.map((item) => ({
+          productId: item.productId,
+          name: item.product.name,
+          image: item.product.images[0] ?? "",
+          price: item.product.price,
+          quantity: item.quantity,
+          size: item.size ?? undefined,
+          color: item.color ?? undefined,
+        })),
+      },
+    },
+  });
+
+  await prisma.$transaction([
+    ...cartItems.map((item) =>
+      prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      })
+    ),
+    prisma.cartItem.deleteMany({ where: { userId: session.user.id } }),
+  ]);
+
+  revalidatePath("/orders");
+  return { success: true, data: { orderId: order.id, amount: total } };
 }
 
 export async function verifyPayment(

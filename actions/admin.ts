@@ -209,6 +209,18 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus): P
   return { success: true };
 }
 
+export async function markOrderPaid(orderId: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { paymentStatus: "PAID", status: "CONFIRMED" },
+  });
+
+  revalidatePath("/admin/orders");
+  return { success: true };
+}
+
 // Customer Management
 export async function getAllCustomers(page = 1, pageSize = 20) {
   await requireAdmin();

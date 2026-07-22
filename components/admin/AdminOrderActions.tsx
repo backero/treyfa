@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { updateOrderStatus } from "@/actions/admin";
+import { updateOrderStatus, markOrderPaid } from "@/actions/admin";
 import { OrderStatus } from "@prisma/client";
 import { toast } from "sonner";
 import { MoreHorizontal, Check } from "lucide-react";
@@ -43,6 +43,18 @@ export function AdminOrderActions({ order }: Props) {
     setUpdating(false);
   }
 
+  async function handleMarkPaid() {
+    setUpdating(true);
+    const result = await markOrderPaid(order.id);
+    if (result.success) {
+      toast.success("Order marked as paid");
+      router.refresh();
+    } else {
+      toast.error("Failed to update payment status");
+    }
+    setUpdating(false);
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,6 +63,13 @@ export function AdminOrderActions({ order }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {order.paymentStatus !== "PAID" && order.paymentMethod !== "RAZORPAY" && (
+          <>
+            <div className="px-2 py-1 text-xs text-muted-foreground font-medium">Payment</div>
+            <DropdownMenuItem onClick={handleMarkPaid}>Mark as Paid</DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <div className="px-2 py-1 text-xs text-muted-foreground font-medium">Update Status</div>
         <DropdownMenuSeparator />
         {statuses.map((status) => (

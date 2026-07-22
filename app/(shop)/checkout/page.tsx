@@ -4,19 +4,20 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartItems, setCartItems, clearCart } from "@/store/cartSlice";
 import { getCartItems } from "@/actions/cart";
-import { getUserAddresses, createOrder } from "@/actions/order";
+import { getUserAddresses, createOrder, createCodOrder, createUpiOrder } from "@/actions/order";
 import { AddressForm } from "@/components/shop/CheckoutForm";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
-import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
+import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD, UPI_ID, UPI_PAYEE_NAME } from "@/lib/utils";
 import Image from "next/image";
-import { MapPin, Check, CreditCard } from "lucide-react";
+import { MapPin, Check, CreditCard, Banknote, QrCode, Copy } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Address } from "@prisma/client";
+import QRCode from "qrcode";
 
 declare global {
   interface Window {
@@ -35,6 +36,8 @@ export default function CheckoutPage() {
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"RAZORPAY" | "COD" | "UPI">("RAZORPAY");
+  const [upiQr, setUpiQr] = useState<string>("");
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
@@ -128,6 +131,65 @@ export default function CheckoutPage() {
       rzp.open();
     } catch {
       toast.error("Payment failed. Please try again.");
+      setProcessing(false);
+    }
+  }
+
+  useEffect(() => {
+    if (paymentMethod !== "UPI" || step !== "payment" || total <= 0) return;
+    const upiLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+      UPI_PAYEE_NAME
+    )}&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("Treyfa Order")}`;
+    QRCode.toDataURL(upiLink, { width: 220, margin: 1 }).then(setUpiQr);
+  }, [paymentMethod, step, total]);
+
+  function copyUpiId() {
+    navigator.clipboard.writeText(UPI_ID);
+    toast.success("UPI ID copied");
+  }
+
+  async function handleUpiOrder() {
+    if (!selectedAddress) {
+      toast.error("Please select a delivery address");
+      return;
+    }
+    setProcessing(true);
+
+    try {
+      const result = await createUpiOrder(selectedAddress);
+      if (!result.success || !result.data) {
+        toast.error(result.error ?? "Failed to place order");
+        setProcessing(false);
+        return;
+      }
+      dispatch(clearCart());
+      toast.success("Order placed! We'll confirm your payment shortly.");
+      router.push("/orders");
+    } catch {
+      toast.error("Failed to place order. Please try again.");
+      setProcessing(false);
+    }
+  }
+
+  async function handleCodOrder() {
+    if (!selectedAddress) {
+      toast.error("Please select a delivery address");
+      return;
+    }
+    setProcessing(true);
+
+    try {
+      const result = await createCodOrder(selectedAddress);
+      if (!result.success || !result.data) {
+        toast.error(result.error ?? "Failed to place order");
+        setProcessing(false);
+        return;
+      }
+      dispatch(clearCart());
+      toast.success("Order placed successfully!");
+      router.push("/orders");
+    } catch {
+      toast.error("Failed to place order. Please try again.");
       setProcessing(false);
     }
   }
@@ -293,21 +355,94 @@ export default function CheckoutPage() {
               <h2 className="font-semibold flex items-center gap-2">
                 <CreditCard className="h-4 w-4" /> Payment
               </h2>
-              <div className="p-6 border border-border rounded-xl text-center space-y-4">
-                <div className="h-16 w-16 rounded-full bg-secondary flex items-center justify-center mx-auto">
-                  <CreditCard className="h-7 w-7" />
+
+              <div className="space-y-3">
+                <div
+                  onClick={() => setPaymentMethod("RAZORPAY")}
+                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
+                    paymentMethod === "RAZORPAY"
+                      ? "border-foreground bg-secondary/30"
+                      : "border-border hover:border-foreground/30"
+                  }`}
+                >
+                  <CreditCard className="h-5 w-5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Pay Online</p>
+                    <p className="text-xs text-muted-foreground">UPI, Cards, NetBanking & more via Razorpay</p>
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Click below to pay securely via Razorpay. Supports UPI, Cards, NetBanking & more.
-                </p>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setStep("review")} disabled={processing}>
-                    Back
-                  </Button>
-                  <Button className="flex-1" onClick={handlePayment} disabled={processing}>
-                    {processing ? "Processing..." : `Pay ${formatPrice(total)}`}
-                  </Button>
+
+                <div
+                  onClick={() => setPaymentMethod("UPI")}
+                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
+                    paymentMethod === "UPI"
+                      ? "border-foreground bg-secondary/30"
+                      : "border-border hover:border-foreground/30"
+                  }`}
+                >
+                  <QrCode className="h-5 w-5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">UPI (Scan & Pay)</p>
+                    <p className="text-xs text-muted-foreground">Pay via Google Pay, PhonePe, Paytm or any UPI app</p>
+                  </div>
                 </div>
+
+                <div
+                  onClick={() => setPaymentMethod("COD")}
+                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
+                    paymentMethod === "COD"
+                      ? "border-foreground bg-secondary/30"
+                      : "border-border hover:border-foreground/30"
+                  }`}
+                >
+                  <Banknote className="h-5 w-5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Cash on Delivery</p>
+                    <p className="text-xs text-muted-foreground">Pay in cash when your order arrives</p>
+                  </div>
+                </div>
+              </div>
+
+              {paymentMethod === "UPI" && (
+                <div className="p-6 border border-border rounded-xl text-center space-y-3">
+                  {upiQr ? (
+                    <img src={upiQr} alt="UPI QR Code" className="mx-auto rounded-lg" width={220} height={220} />
+                  ) : (
+                    <div className="h-[220px] w-[220px] mx-auto bg-secondary animate-pulse rounded-lg" />
+                  )}
+                  <p className="text-sm text-muted-foreground">Scan with any UPI app, or pay to:</p>
+                  <button
+                    type="button"
+                    onClick={copyUpiId}
+                    className="inline-flex items-center gap-2 text-sm font-medium border rounded-lg px-3 py-1.5 hover:bg-secondary/50 transition-colors"
+                  >
+                    {UPI_ID} <Copy className="h-3.5 w-3.5" />
+                  </button>
+                  <p className="text-xs text-muted-foreground">
+                    After paying, click below. We&apos;ll confirm your payment and process the order shortly.
+                  </p>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setStep("review")} disabled={processing}>
+                  Back
+                </Button>
+                <Button
+                  className="flex-1"
+                  onClick={
+                    paymentMethod === "COD" ? handleCodOrder : paymentMethod === "UPI" ? handleUpiOrder : handlePayment
+                  }
+                  disabled={processing}
+                >
+                  {processing
+                    ? "Processing..."
+                    : paymentMethod === "COD"
+                    ? `Place Order (${formatPrice(total)})`
+                    : paymentMethod === "UPI"
+                    ? `I've Paid ${formatPrice(total)}`
+                    : `Pay ${formatPrice(total)}`}
+                </Button>
               </div>
             </motion.div>
           )}
