@@ -32,7 +32,9 @@ export function slugify(text: string): string {
 
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + "...";
+  const sliced = text.slice(0, maxLength);
+  const lastSpace = sliced.lastIndexOf(" ");
+  return (lastSpace > 0 ? sliced.slice(0, lastSpace) : sliced) + "...";
 }
 
 export function calculateDiscount(price: number, comparePrice: number): number {

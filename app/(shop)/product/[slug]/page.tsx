@@ -8,7 +8,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST } from "@/lib/utils";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST, truncate } from "@/lib/utils";
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
 
@@ -18,9 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
+  const shippingNote =
+    product.price >= FREE_SHIPPING_THRESHOLD
+      ? " Free shipping."
+      : ` Free shipping over ₹${FREE_SHIPPING_THRESHOLD}.`;
   return {
     title: product.name,
-    description: product.description.slice(0, 160),
+    description: `${truncate(product.description, 160 - shippingNote.length)}${shippingNote}`,
     alternates: { canonical: `/product/${product.slug}` },
     openGraph: { images: [product.images[0]] },
   };
