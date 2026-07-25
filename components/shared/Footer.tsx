@@ -96,11 +96,11 @@ export function Footer() {
                 <span>+91 94865 00671 / +91 89034 12061</span>
               </a>
               <a
-                href="mailto:info@treyfa.in"
+                href="mailto:treyfaacc@gmail.com"
                 className="flex items-center gap-2.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
               >
                 <Mail className="h-3.5 w-3.5 flex-shrink-0" />
-                info@treyfa.in
+                treyfaacc@gmail.com
               </a>
               <div className="flex items-start gap-2.5 text-sm text-gray-500">
                 <MapPin className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
@@ -180,7 +180,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-1.5 flex-wrap justify-center">
             <span className="text-xs text-gray-400">We accept</span>
-            {["Visa", "MC", "UPI", "Razorpay"].map((m) => (
+            {["UPI", "COD"].map((m) => (
               <span
                 key={m}
                 className="px-2 py-0.5 rounded text-[10px] font-medium border border-gray-200 text-gray-400"

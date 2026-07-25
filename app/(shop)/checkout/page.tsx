@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartItems, setCartItems, clearCart } from "@/store/cartSlice";
 import { getCartItems } from "@/actions/cart";
-import { getUserAddresses, createOrder, createCodOrder, createUpiOrder } from "@/actions/order";
+import { getUserAddresses, createCodOrder, createUpiOrder } from "@/actions/order";
 import { AddressForm } from "@/components/shop/CheckoutForm";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -19,12 +19,6 @@ import { useRouter } from "next/navigation";
 import { Address } from "@prisma/client";
 import QRCode from "qrcode";
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
 type Step = "address" | "review" | "payment";
 
 export default function CheckoutPage() {
@@ -36,8 +30,9 @@ export default function CheckoutPage() {
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"RAZORPAY" | "COD" | "UPI">("RAZORPAY");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("UPI");
   const [upiQr, setUpiQr] = useState<string>("");
+  const [utrNumber, setUtrNumber] = useState<string>("");
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
@@ -68,72 +63,7 @@ export default function CheckoutPage() {
       const defaultAddr = addrs.find((a) => a.isDefault);
       if (defaultAddr) setSelectedAddress(defaultAddr.id);
     });
-
-    // Load Razorpay script
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    document.body.appendChild(script);
   }, [dispatch]);
-
-  async function handlePayment() {
-    if (!selectedAddress) {
-      toast.error("Please select a delivery address");
-      return;
-    }
-    setProcessing(true);
-
-    try {
-      const result = await createOrder(selectedAddress);
-      if (!result.success || !result.data) {
-        toast.error(result.error ?? "Failed to create order");
-        setProcessing(false);
-        return;
-      }
-
-      const { razorpayOrderId, amount, orderId } = result.data;
-
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(amount * 100),
-        currency: "INR",
-        name: "Treyfa",
-        description: "Order Payment",
-        order_id: razorpayOrderId,
-        handler: async (response: any) => {
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId,
-              razorpayOrderId,
-              razorpayPaymentId: response.razorpay_payment_id,
-              razorpaySignature: response.razorpay_signature,
-            }),
-          });
-          const data = await verifyRes.json();
-          if (data.success) {
-            dispatch(clearCart());
-            toast.success("Order placed successfully!");
-            router.push("/orders");
-          } else {
-            toast.error("Payment verification failed");
-          }
-        },
-        prefill: {
-          name: addresses.find((a) => a.id === selectedAddress)?.name,
-          contact: addresses.find((a) => a.id === selectedAddress)?.phone,
-        },
-        theme: { color: "#09090b" },
-        modal: { ondismiss: () => setProcessing(false) },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch {
-      toast.error("Payment failed. Please try again.");
-      setProcessing(false);
-    }
-  }
 
   useEffect(() => {
     if (paymentMethod !== "UPI" || step !== "payment" || total <= 0) return;
@@ -153,10 +83,14 @@ export default function CheckoutPage() {
       toast.error("Please select a delivery address");
       return;
     }
+    if (!utrNumber.trim()) {
+      toast.error("Please enter the UPI transaction / UTR number");
+      return;
+    }
     setProcessing(true);
 
     try {
-      const result = await createUpiOrder(selectedAddress);
+      const result = await createUpiOrder(selectedAddress, utrNumber);
       if (!result.success || !result.data) {
         toast.error(result.error ?? "Failed to place order");
         setProcessing(false);
@@ -358,21 +292,6 @@ export default function CheckoutPage() {
 
               <div className="space-y-3">
                 <div
-                  onClick={() => setPaymentMethod("RAZORPAY")}
-                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
-                    paymentMethod === "RAZORPAY"
-                      ? "border-foreground bg-secondary/30"
-                      : "border-border hover:border-foreground/30"
-                  }`}
-                >
-                  <CreditCard className="h-5 w-5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">Pay Online</p>
-                    <p className="text-xs text-muted-foreground">UPI, Cards, NetBanking & more via Razorpay</p>
-                  </div>
-                </div>
-
-                <div
                   onClick={() => setPaymentMethod("UPI")}
                   className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
                     paymentMethod === "UPI"
@@ -418,9 +337,22 @@ export default function CheckoutPage() {
                   >
                     {UPI_ID} <Copy className="h-3.5 w-3.5" />
                   </button>
-                  <p className="text-xs text-muted-foreground">
-                    After paying, click below. We&apos;ll confirm your payment and process the order shortly.
-                  </p>
+                  <div className="text-left space-y-1.5 pt-2">
+                    <label htmlFor="utr" className="text-xs font-medium">
+                      UPI Transaction / UTR Number
+                    </label>
+                    <input
+                      id="utr"
+                      type="text"
+                      value={utrNumber}
+                      onChange={(e) => setUtrNumber(e.target.value)}
+                      placeholder="e.g. 123456789012"
+                      className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Found in your UPI app's payment confirmation screen. We&apos;ll verify this against the payment before confirming your order.
+                    </p>
+                  </div>
                 </div>
               )}
 
@@ -430,18 +362,14 @@ export default function CheckoutPage() {
                 </Button>
                 <Button
                   className="flex-1"
-                  onClick={
-                    paymentMethod === "COD" ? handleCodOrder : paymentMethod === "UPI" ? handleUpiOrder : handlePayment
-                  }
-                  disabled={processing}
+                  onClick={paymentMethod === "COD" ? handleCodOrder : handleUpiOrder}
+                  disabled={processing || (paymentMethod === "UPI" && !utrNumber.trim())}
                 >
                   {processing
                     ? "Processing..."
                     : paymentMethod === "COD"
                     ? `Place Order (${formatPrice(total)})`
-                    : paymentMethod === "UPI"
-                    ? `I've Paid ${formatPrice(total)}`
-                    : `Pay ${formatPrice(total)}`}
+                    : `I've Paid ${formatPrice(total)}`}
                 </Button>
               </div>
             </motion.div>

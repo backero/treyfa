@@ -21,8 +21,8 @@ const contactDetails = [
   {
     icon: Mail,
     label: "Email",
-    lines: ["info@treyfa.in", "support@treyfa.in"],
-    href: "mailto:info@treyfa.in",
+    lines: ["treyfaacc@gmail.com"],
+    href: "mailto:treyfaacc@gmail.com",
   },
   {
     icon: MapPin,

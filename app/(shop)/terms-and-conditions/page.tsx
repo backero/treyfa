@@ -17,7 +17,7 @@ const sections = [
   },
   {
     title: "3. Shipping & Delivery",
-    body: "Products are shipped within India. International shipping options may be available on request — please contact us at info@treyfa.in for details. Delivery timeframes provided at checkout are estimates only. Treyfa is not responsible for delays caused by third-party logistics providers, natural events, or circumstances beyond our control.",
+    body: "Products are shipped within India. International shipping options may be available on request — please contact us at treyfaacc@gmail.com for details. Delivery timeframes provided at checkout are estimates only. Treyfa is not responsible for delays caused by third-party logistics providers, natural events, or circumstances beyond our control.",
   },
   {
     title: "4. Returns & Refunds",
@@ -45,7 +45,7 @@ const sections = [
   },
   {
     title: "10. Contact",
-    body: "For any questions regarding these Terms and Conditions, please contact us at info@treyfa.in or call +91 89034 12061.",
+    body: "For any questions regarding these Terms and Conditions, please contact us at treyfaacc@gmail.com or call +91 89034 12061.",
   },
 ];
 

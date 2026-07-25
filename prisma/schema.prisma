@@ -192,7 +192,7 @@ model Order {
   addressId       String
   status          OrderStatus   @default(PENDING)
   paymentStatus   PaymentStatus @default(PENDING)
-  paymentMethod   PaymentMethod @default(RAZORPAY)
+  paymentMethod   PaymentMethod @default(UPI)
   paymentId       String?
   razorpayOrderId String?
   subtotal        Float
@@ -252,6 +252,19 @@ model Blog {
   @@index([slug])
   @@index([isPublished])
   @@index([publishedAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
 }
 
 model Review {

@@ -244,3 +244,27 @@ export async function getAllCustomers(page = 1, pageSize = 20) {
 
   return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
 }
+
+// Contact Messages
+export async function getContactMessages(page = 1, pageSize = 20) {
+  await requireAdmin();
+
+  const [items, total, unreadCount] = await Promise.all([
+    prisma.contactMessage.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.contactMessage.count(),
+    prisma.contactMessage.count({ where: { isRead: false } }),
+  ]);
+
+  return { items, total, unreadCount, page, pageSize, totalPages: Math.ceil(total / pageSize) };
+}
+
+export async function markMessageRead(id: string): Promise<ActionResult> {
+  await requireAdmin();
+  await prisma.contactMessage.update({ where: { id }, data: { isRead: true } });
+  revalidatePath("/admin/messages");
+  return { success: true };
+}

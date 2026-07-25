@@ -49,7 +49,7 @@ export default function RefundShippingPage() {
                 <ol className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 h-5 w-5 rounded-full bg-secondary text-[10px] font-bold flex items-center justify-center">1</span>
-                    Contact us at <a href="mailto:support@treyfa.in" className="underline hover:text-foreground">support@treyfa.in</a> or call <a href="tel:+918903412061" className="underline hover:text-foreground">+91 89034 12061</a> within 3 days of receiving your order.
+                    Contact us at <a href="mailto:treyfaacc@gmail.com" className="underline hover:text-foreground">treyfaacc@gmail.com</a> or call <a href="tel:+918903412061" className="underline hover:text-foreground">+91 89034 12061</a> within 3 days of receiving your order.
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 h-5 w-5 rounded-full bg-secondary text-[10px] font-bold flex items-center justify-center">2</span>
@@ -149,7 +149,7 @@ export default function RefundShippingPage() {
           <div className="rounded-xl bg-secondary/30 border border-border p-6">
             <p className="font-semibold text-sm mb-1">Questions about your order?</p>
             <p className="text-sm text-muted-foreground">
-              Email us at <a href="mailto:info@treyfa.in" className="underline hover:text-foreground">info@treyfa.in</a> or call <a href="tel:+919486500671" className="underline hover:text-foreground">+91 94865 00671</a>. We&apos;re available Monday to Saturday, 10AM – 6PM.
+              Email us at <a href="mailto:treyfaacc@gmail.com" className="underline hover:text-foreground">treyfaacc@gmail.com</a> or call <a href="tel:+919486500671" className="underline hover:text-foreground">+91 94865 00671</a>. We&apos;re available Monday to Saturday, 10AM – 6PM.
             </p>
           </div>
         </div>

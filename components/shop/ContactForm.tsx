@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Send, CheckCircle } from "lucide-react";
+import { submitContactMessage } from "@/actions/contact";
+import { toast } from "sonner";
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -17,9 +19,15 @@ export function ContactForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200));
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => formData.set(key, value));
+    const result = await submitContactMessage(formData);
     setLoading(false);
-    setSubmitted(true);
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      toast.error(result.error ?? "Failed to send message. Please try again.");
+    }
   }
 
   if (submitted) {

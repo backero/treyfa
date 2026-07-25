@@ -47,7 +47,7 @@ const faqs = [
       },
       {
         q: "Do you deliver outside India?",
-        a: "We currently ship across India. International shipping options are being explored — contact us at info@treyfa.in for more information on international orders.",
+        a: "We currently ship across India. International shipping options are being explored — contact us at treyfaacc@gmail.com for more information on international orders.",
       },
     ],
   },
@@ -60,7 +60,7 @@ const faqs = [
       },
       {
         q: "How do I initiate a return?",
-        a: "Email us at support@treyfa.in or call +91 89034 12061 within 3 days of delivery. Our team will guide you through the return process. Return shipping is at the customer's expense.",
+        a: "Email us at treyfaacc@gmail.com or call +91 89034 12061 within 3 days of delivery. Our team will guide you through the return process. Return shipping is at the customer's expense.",
       },
       {
         q: "When will I receive my refund?",
@@ -77,11 +77,11 @@ const faqs = [
     items: [
       {
         q: "What payment methods do you accept?",
-        a: "We accept all major credit and debit cards (Visa, Mastercard, American Express), UPI, Net Banking, and Razorpay-powered payment options.",
+        a: "We accept UPI payments (Google Pay, PhonePe, Paytm, or any UPI app) and Cash on Delivery.",
       },
       {
-        q: "Is it safe to enter my payment details?",
-        a: "Absolutely. All transactions are processed through our secure payment gateway (Razorpay), which uses industry-standard encryption to protect your financial information.",
+        q: "Is it safe to pay via UPI?",
+        a: "Yes. You pay directly to our verified UPI ID from your own UPI app, and we confirm your order against the transaction reference number you provide — no card or banking details are ever shared with us.",
       },
       {
         q: "Do I need an account to place an order?",
@@ -182,10 +182,10 @@ export default function FAQContent() {
               Contact Us
             </Link>
             <a
-              href="mailto:support@treyfa.in"
+              href="mailto:treyfaacc@gmail.com"
               className="px-5 py-2.5 rounded-xl border border-border text-sm font-medium hover:bg-secondary transition-colors"
             >
-              support@treyfa.in
+              treyfaacc@gmail.com
             </a>
           </div>
         </AnimatedSection>

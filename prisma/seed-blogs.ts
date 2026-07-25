@@ -9,9 +9,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Hair fall is one of the most common problems faced by both men and women today. Natural remedies like curry leaves oil can provide effective results when used consistently.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2026/04/Curry-leaves-hair-oil-693x462.jpeg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645573/treyfa/products/100-ML-7-406x406.jpg",
     tags: ["hair fall", "curry leaves oil", "hair growth", "natural remedies"],
-    content: `<p>Hair fall is one of the most common problems faced by both men and women today. Natural remedies like curry leaves oil for hair fall can give powerful results when used consistently.</p>
+    content: `<p>Hair fall is one of the most common problems faced by both men and women today. Natural remedies like <a href="/product/curry-leaves-hair-oil-100ml"><strong>curry leaves oil for hair fall</strong></a> can give powerful results when used consistently.</p>
 <h3>Why Hair Fall Happens?</h3>
 <p>Before finding a solution, it's important to understand the cause.</p>
 <h3>Common reasons for hair fall:</h3>
@@ -61,10 +61,11 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Dandruff is one of the most common scalp problems, causing itching, flaking, and discomfort. Many people look for natural solutions, and neem is widely known for its powerful antifungal and antibacterial properties.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2026/04/Neem-oil-and-Shampoo--693x462.jpeg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645501/treyfa/products/100-ML-3-406x406.jpg",
     tags: ["neem oil", "neem shampoo", "dandruff", "scalp health"],
     content: `<p>Dandruff is one of the most common scalp problems, causing itching, flaking, and discomfort. Many people look for natural solutions, and neem is widely known for its powerful antifungal and antibacterial properties.</p>
 <h2>Why Neem is Effective for Dandruff</h2>
+<p>Whether you reach for a <a href="/product/treyfa-neem-anti-dandruff-oil-100ml">neem anti-dandruff oil</a> or a <a href="/product/neem-anti-dandruff-shampoo-conditioner-200ml">neem dandruff shampoo &amp; conditioner</a>, both harness the same traditional ingredient in different ways.</p>
 <p>Neem has been used in traditional hair care for centuries due to its healing properties.</p>
 <ul>
 <li>Helps fight dandruff-causing fungus</li>
@@ -123,9 +124,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Daily exposure to sun, dust, frequent washing, and changing weather can slowly remove natural moisture from hair and skin. Virgin coconut oil offers a simple, natural way to restore that moisture.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Virgin-coconut-oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645665/treyfa/products/BOX-FRIST-PAGE-SAMPLEN-Recovered-8-406x406.png",
     tags: ["coconut oil", "hair care", "skin care", "natural moisturiser"],
-    content: `<p>Virgin coconut oil is widely used by people who want a simple and natural way to care for their hair and skin. Daily exposure to sun, dust, frequent washing, and changing weather can slowly remove natural moisture from hair and skin. Over time, this leads to dryness, rough texture, and dull appearance.</p>
+    content: `<p><a href="/product/coconut-oil-for-hair-growth-100ml">Virgin coconut oil</a> is widely used by people who want a simple and natural way to care for their hair and skin. Daily exposure to sun, dust, frequent washing, and changing weather can slowly remove natural moisture from hair and skin. Over time, this leads to dryness, rough texture, and dull appearance.</p>
 <h3>Common Daily Hair and Skin Care Challenges</h3>
 <p>Many people experience hair and skin dryness because of:</p>
 <ul>
@@ -167,9 +168,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Neem anti-dandruff oil is often chosen by people who experience recurring dandruff, itchy scalp, or scalp dryness. Many anti-dandruff products focus on instant results, but harsh formulas can dry the scalp and cause dandruff to return.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/neem-dandruff-oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645710/treyfa/products/BOX-FRIST-PAGE-SAMPLEN-Recovered-4-406x406.png",
     tags: ["neem", "dandruff oil", "scalp care", "itchy scalp"],
-    content: `<p>Neem anti-dandruff oil is often chosen by people who experience recurring dandruff, itchy scalp, or scalp dryness. Many anti-dandruff products focus on instant results, but harsh formulas can dry the scalp and cause dandruff to return.</p>
+    content: `<p><a href="/product/coconut-neem-anti-dandruff-oil-200ml">Neem anti-dandruff oil</a> is often chosen by people who experience recurring dandruff, itchy scalp, or scalp dryness. Many anti-dandruff products focus on instant results, but harsh formulas can dry the scalp and cause dandruff to return.</p>
 <h3>Why Dandruff Keeps Coming Back</h3>
 <p>Dandruff does not occur due to one single reason. It usually develops because of:</p>
 <ul>
@@ -211,10 +212,10 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Curry leaves contain antioxidants, amino acids, and vitamins essential for healthy hair. When infused in natural oils, they strengthen follicles, reduce hair fall, and improve texture without harmful chemicals.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Curry-leaves-hair-oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645748/treyfa/products/BOX-FRIST-PAGE-SAMPLEN-Recovered-5-406x406.png",
     tags: ["curry leaves", "hair oil", "hair fall", "hair growth", "herbal"],
     content: `<p>Curry leaves contain antioxidants, amino acids, and vitamins A, B, C, and E essential for healthy hair. When infused in natural oils, they penetrate the scalp, strengthen follicles, reduce hair fall, and improve texture without harmful chemicals.</p>
-<h2>Why Your Hair Needs Curry Leaves Hair Oil</h2>
+<h2>Why Your Hair Needs <a href="/product/coconut-curry-leaves-hair-oil-200ml">Curry Leaves Hair Oil</a></h2>
 <p>Hair faces challenges from breakage, dullness, and dryness. This herbal oil nourishes the scalp, strengthens follicles, and restores natural shine by treating root causes rather than masking problems.</p>
 <h3>Key Benefits:</h3>
 <ul>
@@ -248,9 +249,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Henna Black Hair Oil is a natural hair care solution designed to nourish your scalp, strengthen hair roots, and enhance your hair's natural black shine.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/hena-oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645579/treyfa/products/100-ML-6-406x406.jpg",
     tags: ["henna", "hair oil", "black hair", "hair growth", "natural"],
-    content: `<p>Henna Black Hair Oil is a natural hair care solution designed to nourish your scalp, strengthen hair roots, and enhance your hair's natural black shine.</p>
+    content: `<p><a href="/product/herbal-henna-black-hair-oil-100ml">Henna Black Hair Oil</a> is a natural hair care solution designed to nourish your scalp, strengthen hair roots, and enhance your hair's natural black shine.</p>
 <h2>What Makes Henna Black Hair Oil Special?</h2>
 <p>Henna Black Hair Oil is formulated using traditional herbal extracts that deeply nourish the scalp. It maintains natural hair color while strengthening from the roots. Unlike chemical-based alternatives, this formula prioritises long-term hair wellness without damage and suits all hair types for both men and women.</p>
 <h3>Benefits of Henna Black Hair Oil</h3>
@@ -285,9 +286,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Hibiscus chamomile oil is often chosen by people whose hair feels dry, frizzy, or stressed due to pollution, heat styling, or frequent washing. Many hair oils focus only on thickness or shine, but stressed hair needs calm and balance first.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Hibiscus-Chamomile-Oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645610/treyfa/products/100ml-1-406x406.jpg",
     tags: ["hibiscus", "chamomile", "hair oil", "frizz", "scalp care"],
-    content: `<p>Hibiscus chamomile oil is often chosen by people whose hair feels dry, frizzy, or stressed due to pollution, heat styling, or frequent washing. Many hair oils focus only on thickness or shine, but stressed hair needs calm and balance first.</p>
+    content: `<p><a href="/product/hibiscus-chamomile-hair-oil-100ml">Hibiscus chamomile oil</a> is often chosen by people whose hair feels dry, frizzy, or stressed due to pollution, heat styling, or frequent washing. Many hair oils focus only on thickness or shine, but stressed hair needs calm and balance first.</p>
 <h3>What Causes Hair Stress?</h3>
 <ul>
 <li>Excess heat from styling tools</li>
@@ -333,9 +334,9 @@ const blogs = [
     category: "Skin Care",
     excerpt:
       "Turmeric foaming face wash is often chosen by people who experience frequent acne, oily skin, or recurring breakouts. This article explains why acne returns and how turmeric-based cleansing supports daily skin balance.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/turmeric-foaming-face-wash-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645660/treyfa/products/BOX-FRIST-PAGE-SAMPLE-9-406x406.png",
     tags: ["turmeric", "face wash", "acne", "oily skin", "skin care"],
-    content: `<p>Turmeric foaming face wash is often chosen by people who experience frequent acne, oily skin, or recurring breakouts.</p>
+    content: `<p><a href="/product/turmeric-foaming-face-wash-150ml">Turmeric foaming face wash</a> is often chosen by people who experience frequent acne, oily skin, or recurring breakouts.</p>
 <h2>Why Acne Keeps Coming Back</h2>
 <p>Acne is not caused by one single factor. It usually develops due to:</p>
 <ul>
@@ -369,9 +370,9 @@ const blogs = [
     category: "Skin Care",
     excerpt:
       "Choco coffee face wash is commonly used by people who feel their skin looks dull, tired, or oily even after regular washing. Discover how this unique combination revives skin.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/choco-coffee-face-wash-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645685/treyfa/products/100-ml-1-406x406.jpg",
     tags: ["coffee", "chocolate", "face wash", "dull skin", "skin care"],
-    content: `<p>Choco coffee face wash is commonly used by people who feel their skin looks dull, tired, or oily even after regular washing.</p>
+    content: `<p><a href="/product/choco-coffee-face-wash-100ml">Choco coffee face wash</a> is commonly used by people who feel their skin looks dull, tired, or oily even after regular washing.</p>
 <h3>Why Skin Looks Dull and Tired</h3>
 <p>Dull skin is usually caused by:</p>
 <ul>
@@ -405,9 +406,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Neem dandruff shampoo is recommended when flakes persist despite regular washing. This article explores why dandruff recurs, why many products fail, and how neem-based care supports long-term scalp health.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/neem-dandruff-shampoo-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645784/treyfa/products/BOX-FRIST-PAGE-SAMPLE-15-406x406.png",
     tags: ["neem shampoo", "dandruff", "scalp health", "herbal shampoo"],
-    content: `<p>Neem dandruff shampoo is recommended when flakes persist despite regular washing.</p>
+    content: `<p><a href="/product/neem-anti-dandruff-shampoo-conditioner-200ml">Neem dandruff shampoo</a> is recommended when flakes persist despite regular washing.</p>
 <h3>Why Dandruff Keeps Coming Back</h3>
 <p>Dandruff is not merely a surface concern. It typically results from a combination of excess scalp oil, fungal overgrowth, and irregular skin shedding patterns. Without addressing these underlying factors, the condition becomes cyclical rather than temporary.</p>
 <h3>Why Regular Anti-Dandruff Shampoos Often Fail</h3>
@@ -440,9 +441,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Turmeric shampoo conditioner is gaining attention from people dealing with scalp irritation, dandruff, and hair thinning who want a natural approach to healthier hair.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Turmeric-Shampoo-Conditioner-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645837/treyfa/products/BOX-FRIST-PAGE-SAMPLE-10-406x406.png",
     tags: ["turmeric", "shampoo", "conditioner", "curcumin", "scalp health"],
-    content: `<p>Turmeric shampoo conditioner is gaining attention from people dealing with scalp irritation, dandruff, and hair thinning who want a natural approach to healthier hair.</p>
+    content: `<p><a href="/product/turmeric-shampoo-conditioner-set-200ml">Turmeric shampoo conditioner</a> is gaining attention from people dealing with scalp irritation, dandruff, and hair thinning who want a natural approach to healthier hair.</p>
 <h2>Understanding Turmeric's Hair Care Benefits</h2>
 <h3>Anti-inflammatory properties reduce scalp irritation</h3>
 <p>Turmeric contains powerful anti-inflammatory compounds that work wonders for irritated scalps. When your scalp feels itchy, red, or inflamed, these compounds get to work reducing the underlying inflammation that causes discomfort. Using a shampoo with turmeric regularly can significantly decrease scalp inflammation, creating a healthier environment for hair growth.</p>
@@ -473,9 +474,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Hibiscus shampoo offers a natural solution for anyone struggling with dull, damaged, or thinning hair. Discover how this flower-powered ingredient addresses multiple hair concerns at once.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Hibiscus-shampoo-716x462.jpg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645528/treyfa/products/200ml-406x406.jpg",
     tags: ["hibiscus", "shampoo", "hair growth", "hair loss", "natural"],
-    content: `<p>Hibiscus shampoo offers a natural solution for anyone struggling with dull, damaged, or thinning hair.</p>
+    content: `<p><a href="/product/hibiscus-shampoo-hair-growth-200ml">Hibiscus shampoo</a> offers a natural solution for anyone struggling with dull, damaged, or thinning hair.</p>
 <h2>Discover the Natural Power of Hibiscus for Hair Health</h2>
 <h3>Strengthen weak and brittle hair strands naturally</h3>
 <p>Hibiscus flowers pack a serious punch when it comes to repairing damaged hair. The natural amino acids found in hibiscus petals work like tiny building blocks, filling in gaps where hair cuticles have been damaged by heat styling, chemical treatments, or environmental stress. The mucilage content in hibiscus acts as a natural conditioner, coating each hair fiber with a protective layer.</p>
@@ -503,9 +504,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Virgin coconut vetiver oil merges coconut oil's moisturising power with vetiver's therapeutic benefits, offering a natural alternative for hair, skin, and overall wellness.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Virgin-Coconut-Vetiver-Oil-716x462.jpg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645496/treyfa/products/100ml-406x406.jpg",
     tags: ["coconut oil", "vetiver", "hair oil", "skin care", "aromatherapy"],
-    content: `<p>Virgin coconut vetiver oil merges coconut oil's moisturising power with vetiver's therapeutic benefits, offering a natural alternative for wellness and beauty routines.</p>
+    content: `<p><a href="/product/pure-vetiver-coconut-oil-hair-skin-200ml">Virgin coconut vetiver oil</a> merges coconut oil's moisturising power with vetiver's therapeutic benefits, offering a natural alternative for wellness and beauty routines.</p>
 <h2>Understanding Virgin Coconut Vetiver Oil Properties</h2>
 <h3>Unique Aromatic Profile</h3>
 <p>Virgin coconut vetiver oil creates a distinctive scent balancing tropical sweetness with earthy sophistication. Fresh coconut oil contributes light, creamy notes with subtle vanilla undertones, while vetiver adds deep, woody aromatics reminiscent of wet earth after rain.</p>
@@ -532,9 +533,9 @@ const blogs = [
     category: "Wellness",
     excerpt:
       "Basil Heaven Heal Oil combines the therapeutic power of basil essential oil with a carefully chosen carrier base to create a potent natural healing remedy used for centuries.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Basil-heaven-heal-oil-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645789/treyfa/products/BOX-FRIST-PAGE-SAMPLE-26-406x406.png",
     tags: ["basil oil", "healing oil", "anti-inflammatory", "natural wellness", "essential oils"],
-    content: `<p>Basil Heaven Heal Oil combines the therapeutic power of basil essential oil with simple DIY preparation to create a potent natural healing remedy.</p>
+    content: `<p><a href="/product/basil-healing-oil-heaven-100ml">Basil Heaven Heal Oil</a> combines the therapeutic power of basil essential oil with simple DIY preparation to create a potent natural healing remedy.</p>
 <h2>Understanding Basil's Powerful Healing Properties</h2>
 <h3>Ancient medicinal uses across cultures</h3>
 <p>Basil has been treasured as a healing powerhouse for over 5,000 years. Traditional Ayurvedic medicine in India elevated basil, particularly Holy Basil (Ocimum sanctum), to divine status, known as "Tulsi" and prescribed for stress relief and immune support. Greek and Roman physicians documented basil's therapeutic applications for wound healing and digestive support.</p>
@@ -563,9 +564,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Hibiscus conditioner is transforming how people care for their hair naturally. This vibrant flower packs serious power for anyone dealing with dry, damaged, or slow-growing hair.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Hibiscus-Conditioner-693x462.png",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645532/treyfa/products/200-ML-406x406.jpg",
     tags: ["hibiscus", "conditioner", "hair moisture", "hair growth", "natural"],
-    content: `<p>Hibiscus conditioner is transforming how people care for their hair naturally. This vibrant flower packs serious power for anyone dealing with dry, damaged, or slow-growing hair.</p>
+    content: `<p><a href="/product/hibiscus-conditioner-deep-hair-repair-200ml">Hibiscus conditioner</a> is transforming how people care for their hair naturally. This vibrant flower packs serious power for anyone dealing with dry, damaged, or slow-growing hair.</p>
 <h2>Unlock the Natural Power of Hibiscus for Hair Health</h2>
 <h3>Transform Dry Hair into Silky Smooth Strands</h3>
 <p>Hibiscus conditioner works like magic on parched, brittle hair that's been damaged by heat styling, chemical treatments, or environmental stressors. The flower's natural mucilage content creates a protective coating around each strand, sealing in moisture and preventing water loss.</p>
@@ -601,9 +602,9 @@ const blogs = [
     category: "Hair Care",
     excerpt:
       "Transform your hair using a natural blend of chocolate and coffee. This combination delivers antioxidant-rich cocoa and caffeine to nourish damaged follicles, stimulate scalp circulation, and deliver salon-quality results at home.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/choco-shampoo-conditioner-716x462.jpg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645769/treyfa/products/BOX-FRIST-PAGE-SAMPLE-12-406x406.png",
     tags: ["coffee", "chocolate", "shampoo", "conditioner", "hair growth"],
-    content: `<p>Transform your hair using a natural blend of chocolate and coffee ingredients. This product combines antioxidant-rich cocoa and caffeine to nourish damaged follicles, stimulate scalp circulation, and deliver salon-quality results at home.</p>
+    content: `<p>Transform your hair using a natural blend of chocolate and coffee ingredients with our <a href="/product/choco-coffee-shampoo-conditioner-200ml">Choco Coffee Shampoo &amp; Conditioner</a>. This product combines antioxidant-rich cocoa and caffeine to nourish damaged follicles, stimulate scalp circulation, and deliver salon-quality results at home.</p>
 <h2>Transform Your Hair with Natural Chocolate and Coffee Power</h2>
 <h3>Antioxidant-rich cocoa nourishes damaged hair follicles</h3>
 <p>Cocoa beans contain powerful antioxidants like flavonoids and polyphenols that repair damaged hair follicles and fight free radicals weakening hair structure. The mineral content — including iron, magnesium, and zinc — penetrates deep into follicles to strengthen them from roots upward. Natural fats in cocoa butter create a protective barrier around each strand, sealing in moisture and preventing environmental damage.</p>
@@ -629,9 +630,9 @@ const blogs = [
     category: "Skin Care",
     excerpt:
       "Neem foaming face wash has become a game-changer for people dealing with acne, oily skin, and stubborn breakouts. Discover how this ancient herb purifies and heals modern skin concerns.",
-    coverImage: "https://treyfa.in/wp-content/uploads/2025/12/Neem-Face-wash-693x462.jpg",
+    coverImage: "https://res.cloudinary.com/dthgjtfvu/image/upload/v1784645676/treyfa/products/BOX-FRIST-PAGE-SAMPLE-2-406x406.png",
     tags: ["neem", "face wash", "acne", "oily skin", "ayurveda"],
-    content: `<p>Neem foaming face wash has become a game-changer for people dealing with acne, oily skin, and stubborn breakouts.</p>
+    content: `<p><a href="/product/herbal-neem-foaming-face-wash-150ml">Neem foaming face wash</a> has become a game-changer for people dealing with acne, oily skin, and stubborn breakouts.</p>
 <h2>Understanding Neem's Natural Power for Skin Health</h2>
 <h3>Ancient Ayurvedic Properties That Purify and Heal Skin</h3>
 <p>For over 5,000 years, neem has been a cornerstone of Ayurvedic medicine, earning the Sanskrit name "Sarva Roga Nivarini" – the healer of all ailments. This powerful tree contains unique compounds like nimbidin, nimbin, and azadirachtin that work together to create a natural skin purification system.</p>

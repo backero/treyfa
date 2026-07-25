@@ -70,6 +70,11 @@ export default async function AdminOrdersPage({
                     <p className="text-xs text-muted-foreground">
                       {order.paymentStatus} · {order.paymentMethod}
                     </p>
+                    {order.paymentMethod === "UPI" && order.paymentId && (
+                      <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
+                        UTR: {order.paymentId}
+                      </p>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${config.color}`}>

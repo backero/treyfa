@@ -98,7 +98,7 @@ const organizationJsonLd = {
     addressCountry: "IN",
   },
   telephone: ["+91-9486500671", "+91-8903412061"],
-  email: "support@treyfa.in",
+  email: "treyfaacc@gmail.com",
   priceRange: "₹₹",
   sameAs: [
     "https://instagram.com/treyfa_naturalcare",

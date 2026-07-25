@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Store,
   BookOpen,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/orders", icon: ShoppingBag, label: "Orders" },
   { href: "/admin/customers", icon: Users, label: "Customers" },
   { href: "/admin/blogs", icon: BookOpen, label: "Blog" },
+  { href: "/admin/messages", icon: MessageSquare, label: "Messages" },
 ];
 
 export function AdminNav() {
