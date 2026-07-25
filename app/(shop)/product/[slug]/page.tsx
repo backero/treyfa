@@ -13,7 +13,7 @@ import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST, truncate } from "@/lib/utils";
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ tab?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -31,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { tab } = await searchParams;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
@@ -140,7 +141,12 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Scrollable product info — z-0 so zoom panel (z-30) renders above */}
           <div className="relative z-0">
-            <ProductDetailContent product={product} reviews={reviews} existingReview={existingReview} />
+            <ProductDetailContent
+              product={product}
+              reviews={reviews}
+              existingReview={existingReview}
+              initialTab={tab === "reviews" ? "reviews" : undefined}
+            />
           </div>
         </div>
 

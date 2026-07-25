@@ -41,3 +41,42 @@ export async function sendNewOrderEmail(order: {
     console.error("Failed to send order notification email:", err);
   }
 }
+
+export async function sendReviewRequestEmail(order: {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  items: { name: string; slug: string }[];
+}) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping review request email");
+    return false;
+  }
+  if (!order.customerEmail) return false;
+
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
+  const itemsHtml = order.items
+    .map(
+      (i) =>
+        `<li>${i.name} — <a href="${siteUrl}/product/${i.slug}?tab=reviews">Write a review</a></li>`
+    )
+    .join("");
+
+  try {
+    await resend.emails.send({
+      from: "Treyfa <onboarding@resend.dev>",
+      to: order.customerEmail,
+      subject: "How was your Treyfa order? Leave a quick review",
+      html: `
+        <p>Hi ${order.customerName || "there"},</p>
+        <p>We hope you're loving your recent order (#${order.id.slice(-8).toUpperCase()})! Would you mind sharing a quick review? It helps other customers and takes less than a minute.</p>
+        <ul>${itemsHtml}</ul>
+        <p>Thank you for shopping with Treyfa!</p>
+      `,
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to send review request email:", err);
+    return false;
+  }
+}

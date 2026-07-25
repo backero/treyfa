@@ -202,6 +202,8 @@ model Order {
   tax             Float         @default(0)
   total           Float
   notes           String?
+  deliveredAt         DateTime?
+  reviewRequestSentAt DateTime?
 
   user      User        @relation(fields: [userId], references: [id])
   address   Address     @relation(fields: [addressId], references: [id])

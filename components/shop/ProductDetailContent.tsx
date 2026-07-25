@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -25,11 +25,20 @@ type Props = {
   product: ProductWithCategory;
   reviews: (Review & { user: Pick<User, "name"> })[];
   existingReview: Review | null;
+  initialTab?: Tab;
 };
 
-export function ProductDetailContent({ product, reviews, existingReview }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>("description");
+export function ProductDetailContent({ product, reviews, existingReview, initialTab }: Props) {
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab ?? "description");
+  const tabsRef = useRef<HTMLDivElement>(null);
   const discount = calculateDiscount(product.price, product.comparePrice ?? 0);
+
+  useEffect(() => {
+    if (initialTab) {
+      tabsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -132,6 +141,7 @@ export function ProductDetailContent({ product, reviews, existingReview }: Props
 
       {/* Animated Tabs */}
       <motion.div
+        ref={tabsRef}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}

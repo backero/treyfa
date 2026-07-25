@@ -204,9 +204,14 @@ export async function getAllOrders(page = 1, pageSize = 20): Promise<PaginatedRe
 export async function updateOrderStatus(orderId: string, status: OrderStatus): Promise<ActionResult> {
   await requireAdmin();
 
+  const order = await prisma.order.findUnique({ where: { id: orderId }, select: { deliveredAt: true } });
+
   await prisma.order.update({
     where: { id: orderId },
-    data: { status },
+    data: {
+      status,
+      deliveredAt: status === "DELIVERED" && !order?.deliveredAt ? new Date() : undefined,
+    },
   });
 
   revalidatePath("/admin/orders");
