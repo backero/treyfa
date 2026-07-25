@@ -21,6 +21,13 @@ import QRCode from "qrcode";
 
 type Step = "address" | "review" | "payment";
 
+function handleRadioKeyDown(e: React.KeyboardEvent, select: () => void) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    select();
+  }
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -183,12 +190,17 @@ export default function CheckoutPage() {
               </h2>
 
               {addresses.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-3" role="radiogroup" aria-label="Delivery address">
                   {addresses.map((addr) => (
                     <div
                       key={addr.id}
+                      role="radio"
+                      aria-checked={selectedAddress === addr.id}
+                      aria-label={`Deliver to ${addr.name}, ${addr.line1}, ${addr.city}, ${addr.state} - ${addr.pincode}`}
+                      tabIndex={0}
                       onClick={() => setSelectedAddress(addr.id)}
-                      className={`p-4 border rounded-xl cursor-pointer transition-all ${
+                      onKeyDown={(e) => handleRadioKeyDown(e, () => setSelectedAddress(addr.id))}
+                      className={`p-4 border rounded-xl cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 ${
                         selectedAddress === addr.id
                           ? "border-foreground bg-secondary/30"
                           : "border-border hover:border-foreground/30"
@@ -290,10 +302,15 @@ export default function CheckoutPage() {
                 <CreditCard className="h-4 w-4" /> Payment
               </h2>
 
-              <div className="space-y-3">
+              <div className="space-y-3" role="radiogroup" aria-label="Payment method">
                 <div
+                  role="radio"
+                  aria-checked={paymentMethod === "UPI"}
+                  aria-label="UPI (Scan & Pay) — Pay via Google Pay, PhonePe, Paytm or any UPI app"
+                  tabIndex={0}
                   onClick={() => setPaymentMethod("UPI")}
-                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
+                  onKeyDown={(e) => handleRadioKeyDown(e, () => setPaymentMethod("UPI"))}
+                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 ${
                     paymentMethod === "UPI"
                       ? "border-foreground bg-secondary/30"
                       : "border-border hover:border-foreground/30"
@@ -307,8 +324,13 @@ export default function CheckoutPage() {
                 </div>
 
                 <div
+                  role="radio"
+                  aria-checked={paymentMethod === "COD"}
+                  aria-label="Cash on Delivery — Pay in cash when your order arrives"
+                  tabIndex={0}
                   onClick={() => setPaymentMethod("COD")}
-                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 ${
+                  onKeyDown={(e) => handleRadioKeyDown(e, () => setPaymentMethod("COD"))}
+                  className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 ${
                     paymentMethod === "COD"
                       ? "border-foreground bg-secondary/30"
                       : "border-border hover:border-foreground/30"
