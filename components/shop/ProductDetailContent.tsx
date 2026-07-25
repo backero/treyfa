@@ -6,39 +6,28 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { AddToCartSection } from "@/components/shop/AddToCartSection";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
-import { Star, Truck, Shield, CheckCircle, Leaf, FlaskConical, Sparkles } from "lucide-react";
+import { Star, Truck, Shield, CheckCircle, Leaf, FlaskConical, Sparkles, MessageSquare } from "lucide-react";
 import { ProductWithCategory } from "@/types";
 import { cn } from "@/lib/utils";
+import { ProductReviews } from "@/components/shop/ProductReviews";
+import { Review, User } from "@prisma/client";
 
-type Tab = "description" | "ingredients" | "benefits";
+type Tab = "description" | "ingredients" | "benefits" | "reviews";
 
 const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "description", label: "Description", icon: Sparkles },
-  { id: "ingredients", label: "Ingredients", icon: Leaf },
+  { id: "ingredients", label: "Key Ingredients", icon: Leaf },
   { id: "benefits", label: "Benefits", icon: FlaskConical },
+  { id: "reviews", label: "Reviews", icon: MessageSquare },
 ];
 
-const mockIngredients = [
-  "Neem Extract (Azadirachta indica)",
-  "Turmeric Root (Curcuma longa)",
-  "Coconut Oil (Cocos nucifera)",
-  "Aloe Vera Gel",
-  "Shea Butter",
-  "Vitamin E",
-];
+type Props = {
+  product: ProductWithCategory;
+  reviews: (Review & { user: Pick<User, "name"> })[];
+  existingReview: Review | null;
+};
 
-const mockBenefits = [
-  "Deeply nourishes and hydrates skin",
-  "Reduces inflammation and redness",
-  "Natural antibacterial protection",
-  "Brightens and evens skin tone",
-  "Suitable for all skin types",
-  "Free from harmful chemicals",
-];
-
-type Props = { product: ProductWithCategory };
-
-export function ProductDetailContent({ product }: Props) {
+export function ProductDetailContent({ product, reviews, existingReview }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("description");
   const discount = calculateDiscount(product.price, product.comparePrice ?? 0);
 
@@ -69,7 +58,7 @@ export function ProductDetailContent({ product }: Props) {
             ))}
           </div>
           <span className="text-sm text-muted-foreground">
-            {product.rating.toFixed(1)} ({product.reviewCount} reviews)
+            {product.rating.toFixed(1)} ({product.reviewCount} {product.reviewCount === 1 ? "review" : "reviews"})
           </span>
         </div>
       </motion.div>
@@ -160,7 +149,10 @@ export function ProductDetailContent({ product }: Props) {
                   />
                 )}
                 <Icon className="h-3.5 w-3.5 relative z-10" />
-                <span className="relative z-10">{tab.label}</span>
+                <span className="relative z-10">
+                  {tab.label}
+                  {tab.id === "reviews" && reviews.length > 0 && ` (${reviews.length})`}
+                </span>
               </button>
             );
           })}
@@ -182,37 +174,60 @@ export function ProductDetailContent({ product }: Props) {
             )}
 
             {activeTab === "ingredients" && (
-              <ul className="space-y-2.5">
-                {mockIngredients.map((ing, i) => (
-                  <motion.li
-                    key={ing}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex items-center gap-2.5 text-sm text-muted-foreground"
-                  >
-                    <Leaf className="h-3.5 w-3.5 text-green-600 flex-shrink-0" />
-                    {ing}
-                  </motion.li>
-                ))}
-              </ul>
+              <>
+                {product.ingredients.length > 0 ? (
+                  <>
+                    <ul className="space-y-2.5">
+                      {product.ingredients.map((ing, i) => (
+                        <motion.li
+                          key={ing}
+                          initial={{ opacity: 0, x: -12 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="flex items-center gap-2.5 text-sm text-muted-foreground"
+                        >
+                          <Leaf className="h-3.5 w-3.5 text-green-600 flex-shrink-0" />
+                          {ing}
+                        </motion.li>
+                      ))}
+                    </ul>
+                    <p className="text-xs text-muted-foreground/70 mt-4">
+                      These are the key active ingredients. For the full ingredient list, please refer to the product packaging.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Ingredient information for this product isn&apos;t available yet — please check the product packaging.
+                  </p>
+                )}
+              </>
             )}
 
             {activeTab === "benefits" && (
-              <ul className="space-y-2.5">
-                {mockBenefits.map((benefit, i) => (
-                  <motion.li
-                    key={benefit}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex items-center gap-2.5 text-sm text-muted-foreground"
-                  >
-                    <CheckCircle className="h-3.5 w-3.5 text-green-600 flex-shrink-0" />
-                    {benefit}
-                  </motion.li>
-                ))}
-              </ul>
+              <>
+                {product.benefits.length > 0 ? (
+                  <ul className="space-y-2.5">
+                    {product.benefits.map((benefit, i) => (
+                      <motion.li
+                        key={benefit}
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="flex items-center gap-2.5 text-sm text-muted-foreground"
+                      >
+                        <CheckCircle className="h-3.5 w-3.5 text-green-600 flex-shrink-0" />
+                        {benefit}
+                      </motion.li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Benefit information for this product isn&apos;t available yet.</p>
+                )}
+              </>
+            )}
+
+            {activeTab === "reviews" && (
+              <ProductReviews productId={product.id} reviews={reviews} existingReview={existingReview} />
             )}
           </motion.div>
         </AnimatePresence>

@@ -137,6 +137,8 @@ model Product {
   categoryId  String
   images      String[]
   tags        String[]
+  ingredients String[] @default([])
+  benefits    String[] @default([])
   isFeatured  Boolean @default(false)
   isActive    Boolean @default(true)
   rating      Float   @default(0)

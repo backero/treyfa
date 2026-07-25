@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProductBySlug, getRelatedProducts } from "@/actions/product";
+import { getProductReviews, getUserReviewForProduct } from "@/actions/review";
 import { ImageGallery } from "@/components/shop/ImageGallery";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductDetailContent } from "@/components/shop/ProductDetailContent";
@@ -36,6 +37,10 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const related = await getRelatedProducts(product.id, product.categoryId);
+  const [reviews, existingReview] = await Promise.all([
+    getProductReviews(product.id),
+    getUserReviewForProduct(product.id),
+  ]);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -135,7 +140,7 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Scrollable product info — z-0 so zoom panel (z-30) renders above */}
           <div className="relative z-0">
-            <ProductDetailContent product={product} />
+            <ProductDetailContent product={product} reviews={reviews} existingReview={existingReview} />
           </div>
         </div>
 

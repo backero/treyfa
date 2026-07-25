@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,18 @@ import { Category, Product } from "@prisma/client";
 import { createProduct, updateProduct } from "@/actions/admin";
 import { toast } from "sonner";
 import Image from "next/image";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Upload, Loader2 } from "lucide-react";
+
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB — stay under the serverless request body limit
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 type Props = {
   categories: Category[];
@@ -33,6 +44,8 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
   const [imageUrl, setImageUrl] = useState("");
   const [isFeatured, setIsFeatured] = useState(product?.isFeatured ?? false);
   const [isActive, setIsActive] = useState(product?.isActive ?? true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function addImage() {
     if (imageUrl && !images.includes(imageUrl)) {
@@ -43,6 +56,40 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
 
   function removeImage(url: string) {
     setImages(images.filter((img) => img !== url));
+  }
+
+  async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = "";
+    if (files.length === 0) return;
+
+    const oversized = files.find((f) => f.size > MAX_UPLOAD_BYTES);
+    if (oversized) {
+      toast.error(`${oversized.name} is too large (max 4MB). Please compress it and try again.`);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const uploaded: string[] = [];
+      for (const file of files) {
+        const dataUrl = await fileToDataUrl(file);
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: dataUrl }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Upload failed");
+        uploaded.push(data.url);
+      }
+      setImages((prev) => [...prev, ...uploaded]);
+      toast.success(uploaded.length > 1 ? `${uploaded.length} images uploaded` : "Image uploaded");
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -124,8 +171,57 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="ingredients">Key Ingredients (comma-separated)</Label>
+          <Textarea
+            id="ingredients"
+            name="ingredients"
+            rows={2}
+            defaultValue={product?.ingredients.join(", ")}
+            placeholder="Neem Extract, Coconut Oil, Aloe Vera"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="benefits">Benefits (comma-separated)</Label>
+          <Textarea
+            id="benefits"
+            name="benefits"
+            rows={2}
+            defaultValue={product?.benefits.join(", ")}
+            placeholder="Reduces hair fall, Strengthens roots"
+          />
+        </div>
+      </div>
+
       <div className="space-y-3">
         <Label>Product Images</Label>
+        <div className="flex gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileSelect}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
+            {uploading ? "Uploading..." : "Upload from device"}
+          </Button>
+        </div>
+        <div className="flex gap-2 items-center">
+          <span className="text-xs text-muted-foreground">or paste an image URL:</span>
+        </div>
         <div className="flex gap-2">
           <Input
             value={imageUrl}

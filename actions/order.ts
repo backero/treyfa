@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { ActionResult, OrderWithDetails } from "@/types";
 import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { sendNewOrderEmail } from "@/lib/resend";
 
 export async function createCodOrder(addressId: string): Promise<ActionResult<{ orderId: string }>> {
   const session = await auth();
@@ -61,6 +62,19 @@ export async function createCodOrder(addressId: string): Promise<ActionResult<{ 
     ),
     prisma.cartItem.deleteMany({ where: { userId: session.user.id } }),
   ]);
+
+  await sendNewOrderEmail({
+    id: order.id,
+    total: order.total,
+    paymentMethod: "Cash on Delivery",
+    customerName: session.user.name ?? "Customer",
+    customerEmail: session.user.email ?? "",
+    items: cartItems.map((item) => ({
+      name: item.product.name,
+      quantity: item.quantity,
+      price: item.product.price,
+    })),
+  });
 
   revalidatePath("/orders");
   return { success: true, data: { orderId: order.id } };
@@ -125,6 +139,19 @@ export async function createUpiOrder(addressId: string, transactionId: string): 
     ),
     prisma.cartItem.deleteMany({ where: { userId: session.user.id } }),
   ]);
+
+  await sendNewOrderEmail({
+    id: order.id,
+    total: order.total,
+    paymentMethod: `UPI (UTR: ${trimmedTxnId})`,
+    customerName: session.user.name ?? "Customer",
+    customerEmail: session.user.email ?? "",
+    items: cartItems.map((item) => ({
+      name: item.product.name,
+      quantity: item.quantity,
+      price: item.product.price,
+    })),
+  });
 
   revalidatePath("/orders");
   return { success: true, data: { orderId: order.id, amount: total } };

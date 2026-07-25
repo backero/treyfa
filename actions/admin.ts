@@ -90,6 +90,8 @@ export async function createProduct(formData: FormData): Promise<ActionResult> {
     categoryId: formData.get("categoryId") as string,
     images: JSON.parse((formData.get("images") as string) || "[]"),
     tags: (formData.get("tags") as string).split(",").map((t) => t.trim()).filter(Boolean),
+    ingredients: (formData.get("ingredients") as string ?? "").split(",").map((t) => t.trim()).filter(Boolean),
+    benefits: (formData.get("benefits") as string ?? "").split(",").map((t) => t.trim()).filter(Boolean),
     isFeatured: formData.get("isFeatured") === "true",
   };
 
@@ -112,6 +114,8 @@ export async function updateProduct(id: string, formData: FormData): Promise<Act
     categoryId: formData.get("categoryId") as string,
     images: JSON.parse((formData.get("images") as string) || "[]"),
     tags: (formData.get("tags") as string).split(",").map((t) => t.trim()).filter(Boolean),
+    ingredients: (formData.get("ingredients") as string ?? "").split(",").map((t) => t.trim()).filter(Boolean),
+    benefits: (formData.get("benefits") as string ?? "").split(",").map((t) => t.trim()).filter(Boolean),
     isFeatured: formData.get("isFeatured") === "true",
     isActive: formData.get("isActive") === "true",
   };

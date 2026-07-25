@@ -13,6 +13,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No image provided" }, { status: 400 });
   }
 
-  const url = await uploadImage(image, "treyfa/products");
-  return NextResponse.json({ url });
+  try {
+    const url = await uploadImage(image, "treyfa/products");
+    return NextResponse.json({ url });
+  } catch (err) {
+    console.error("Image upload failed:", err);
+    return NextResponse.json({ error: "Image upload failed. Please try again." }, { status: 500 });
+  }
 }
