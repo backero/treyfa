@@ -161,12 +161,14 @@ export function ProductCard({ product }: Props) {
             {product.category.name}
           </p>
           <h3 className="text-sm font-medium line-clamp-2 leading-snug">{product.name}</h3>
-          <div className="flex items-center gap-1">
-            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-            <span className="text-xs text-muted-foreground">
-              {product.rating.toFixed(1)} ({product.reviewCount})
-            </span>
-          </div>
+          {product.reviewCount > 0 && (
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <span className="text-xs text-muted-foreground">
+                {product.rating.toFixed(1)} ({product.reviewCount})
+              </span>
+            </div>
+          )}
           <div className="flex items-center gap-2 pt-0.5">
             <span className="text-sm font-bold">{formatPrice(product.price)}</span>
             {product.comparePrice && product.comparePrice > product.price && (

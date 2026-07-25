@@ -44,23 +44,33 @@ export function ProductDetailContent({ product, reviews, existingReview }: Props
         </Badge>
         <h1 className="text-3xl font-bold leading-tight">{product.name}</h1>
 
-        <div className="flex items-center gap-3 mt-3">
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.round(product.rating)
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-muted"
-                }`}
-              />
-            ))}
+        {product.reviewCount > 0 ? (
+          <div className="flex items-center gap-3 mt-3">
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.round(product.rating)
+                      ? "fill-amber-400 text-amber-400"
+                      : "text-muted"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              {product.rating.toFixed(1)} ({product.reviewCount} {product.reviewCount === 1 ? "review" : "reviews"})
+            </span>
           </div>
-          <span className="text-sm text-muted-foreground">
-            {product.rating.toFixed(1)} ({product.reviewCount} {product.reviewCount === 1 ? "review" : "reviews"})
-          </span>
-        </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setActiveTab("reviews")}
+            className="text-sm text-muted-foreground mt-3 underline hover:text-foreground transition-colors"
+          >
+            No reviews yet — be the first to review
+          </button>
+        )}
       </motion.div>
 
       <Separator />
