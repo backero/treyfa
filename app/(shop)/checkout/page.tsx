@@ -2,24 +2,40 @@
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
+import Script from "next/script";
 import { selectCartItems, setCartItems, clearCart } from "@/store/cartSlice";
 import { getCartItems } from "@/actions/cart";
-import { getUserAddresses, createCodOrder, createUpiOrder } from "@/actions/order";
+import { getUserAddresses, createCodOrder, createRazorpayOrder, verifyRazorpayPayment } from "@/actions/order";
 import { AddressForm } from "@/components/shop/CheckoutForm";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
-import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD, UPI_ID, UPI_PAYEE_NAME } from "@/lib/utils";
+import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
 import Image from "next/image";
-import { MapPin, Check, CreditCard, Banknote, QrCode, Copy } from "lucide-react";
+import { MapPin, Check, CreditCard, Banknote } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Address } from "@prisma/client";
-import QRCode from "qrcode";
 
 type Step = "address" | "review" | "payment";
+
+type RazorpaySuccessResponse = {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+};
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => {
+      open: () => void;
+      on: (event: string, handler: (...args: unknown[]) => void) => void;
+    };
+  }
+}
 
 function handleRadioKeyDown(e: React.KeyboardEvent, select: () => void) {
   if (e.key === "Enter" || e.key === " ") {
@@ -31,15 +47,14 @@ function handleRadioKeyDown(e: React.KeyboardEvent, select: () => void) {
 export default function CheckoutPage() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { data: session } = useSession();
   const items = useSelector(selectCartItems);
   const [step, setStep] = useState<Step>("address");
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("UPI");
-  const [upiQr, setUpiQr] = useState<string>("");
-  const [utrNumber, setUtrNumber] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "RAZORPAY">("RAZORPAY");
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
@@ -72,42 +87,67 @@ export default function CheckoutPage() {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (paymentMethod !== "UPI" || step !== "payment" || total <= 0) return;
-    const upiLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-      UPI_PAYEE_NAME
-    )}&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("Treyfa Order")}`;
-    QRCode.toDataURL(upiLink, { width: 220, margin: 1 }).then(setUpiQr);
-  }, [paymentMethod, step, total]);
-
-  function copyUpiId() {
-    navigator.clipboard.writeText(UPI_ID);
-    toast.success("UPI ID copied");
-  }
-
-  async function handleUpiOrder() {
+  async function handleRazorpayOrder() {
     if (!selectedAddress) {
       toast.error("Please select a delivery address");
       return;
     }
-    if (!utrNumber.trim()) {
-      toast.error("Please enter the UPI transaction / UTR number");
+    if (typeof window.Razorpay === "undefined") {
+      toast.error("Payment gateway is still loading — please try again in a moment.");
       return;
     }
     setProcessing(true);
 
     try {
-      const result = await createUpiOrder(selectedAddress, utrNumber);
+      const result = await createRazorpayOrder(selectedAddress);
       if (!result.success || !result.data) {
-        toast.error(result.error ?? "Failed to place order");
+        toast.error(result.error ?? "Failed to start payment");
         setProcessing(false);
         return;
       }
-      dispatch(clearCart());
-      toast.success("Order placed! We'll confirm your payment shortly.");
-      router.push("/orders");
+      const { orderId, razorpayOrderId, amount, keyId } = result.data;
+
+      const rzp = new window.Razorpay({
+        key: keyId,
+        amount: Math.round(amount * 100),
+        currency: "INR",
+        name: "Treyfa",
+        description: "Order payment",
+        order_id: razorpayOrderId,
+        prefill: {
+          name: session?.user?.name ?? undefined,
+          email: session?.user?.email ?? undefined,
+        },
+        theme: { color: "#111827" },
+        handler: async (response: RazorpaySuccessResponse) => {
+          const verifyResult = await verifyRazorpayPayment(
+            orderId,
+            response.razorpay_order_id,
+            response.razorpay_payment_id,
+            response.razorpay_signature
+          );
+          if (verifyResult.success) {
+            dispatch(clearCart());
+            toast.success("Payment successful! Order placed.");
+            router.push("/orders");
+          } else {
+            toast.error(verifyResult.error ?? "Payment verification failed");
+            setProcessing(false);
+          }
+        },
+        modal: {
+          ondismiss: () => setProcessing(false),
+        },
+      });
+
+      rzp.on("payment.failed", () => {
+        toast.error("Payment failed. Please try again.");
+        setProcessing(false);
+      });
+
+      rzp.open();
     } catch {
-      toast.error("Failed to place order. Please try again.");
+      toast.error("Failed to start payment. Please try again.");
       setProcessing(false);
     }
   }
@@ -148,6 +188,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-5xl">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       <h1 className="text-2xl font-bold mb-8">Checkout</h1>
 
       {/* Steps */}
@@ -305,21 +346,21 @@ export default function CheckoutPage() {
               <div className="space-y-3" role="radiogroup" aria-label="Payment method">
                 <div
                   role="radio"
-                  aria-checked={paymentMethod === "UPI"}
-                  aria-label="UPI (Scan & Pay) — Pay via Google Pay, PhonePe, Paytm or any UPI app"
+                  aria-checked={paymentMethod === "RAZORPAY"}
+                  aria-label="Pay Online — Card, UPI, Netbanking or Wallet via Razorpay"
                   tabIndex={0}
-                  onClick={() => setPaymentMethod("UPI")}
-                  onKeyDown={(e) => handleRadioKeyDown(e, () => setPaymentMethod("UPI"))}
+                  onClick={() => setPaymentMethod("RAZORPAY")}
+                  onKeyDown={(e) => handleRadioKeyDown(e, () => setPaymentMethod("RAZORPAY"))}
                   className={`p-4 border rounded-xl cursor-pointer transition-all flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50 ${
-                    paymentMethod === "UPI"
+                    paymentMethod === "RAZORPAY"
                       ? "border-foreground bg-secondary/30"
                       : "border-border hover:border-foreground/30"
                   }`}
                 >
-                  <QrCode className="h-5 w-5 flex-shrink-0" />
+                  <CreditCard className="h-5 w-5 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="text-sm font-medium">UPI (Scan & Pay)</p>
-                    <p className="text-xs text-muted-foreground">Pay via Google Pay, PhonePe, Paytm or any UPI app</p>
+                    <p className="text-sm font-medium">Pay Online</p>
+                    <p className="text-xs text-muted-foreground">Card, UPI, Netbanking or Wallet — secured by Razorpay</p>
                   </div>
                 </div>
 
@@ -344,54 +385,20 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {paymentMethod === "UPI" && (
-                <div className="p-6 border border-border rounded-xl text-center space-y-3">
-                  {upiQr ? (
-                    <img src={upiQr} alt="UPI QR Code" className="mx-auto rounded-lg" width={220} height={220} />
-                  ) : (
-                    <div className="h-[220px] w-[220px] mx-auto bg-secondary animate-pulse rounded-lg" />
-                  )}
-                  <p className="text-sm text-muted-foreground">Scan with any UPI app, or pay to:</p>
-                  <button
-                    type="button"
-                    onClick={copyUpiId}
-                    className="inline-flex items-center gap-2 text-sm font-medium border rounded-lg px-3 py-1.5 hover:bg-secondary/50 transition-colors"
-                  >
-                    {UPI_ID} <Copy className="h-3.5 w-3.5" />
-                  </button>
-                  <div className="text-left space-y-1.5 pt-2">
-                    <label htmlFor="utr" className="text-xs font-medium">
-                      UPI Transaction / UTR Number
-                    </label>
-                    <input
-                      id="utr"
-                      type="text"
-                      value={utrNumber}
-                      onChange={(e) => setUtrNumber(e.target.value)}
-                      placeholder="e.g. 123456789012"
-                      className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-foreground"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Found in your UPI app's payment confirmation screen. We&apos;ll verify this against the payment before confirming your order.
-                    </p>
-                  </div>
-                </div>
-              )}
-
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep("review")} disabled={processing}>
                   Back
                 </Button>
                 <Button
                   className="flex-1"
-                  onClick={paymentMethod === "COD" ? handleCodOrder : handleUpiOrder}
-                  disabled={processing || (paymentMethod === "UPI" && !utrNumber.trim())}
+                  onClick={paymentMethod === "COD" ? handleCodOrder : handleRazorpayOrder}
+                  disabled={processing}
                 >
                   {processing
                     ? "Processing..."
                     : paymentMethod === "COD"
                     ? `Place Order (${formatPrice(total)})`
-                    : `I've Paid ${formatPrice(total)}`}
+                    : `Pay ${formatPrice(total)}`}
                 </Button>
               </div>
             </motion.div>

@@ -51,6 +51,3 @@ export function generateOrderId(): string {
 export const TAX_RATE = 0.18; // 18% GST
 export const FREE_SHIPPING_THRESHOLD = 999;
 export const SHIPPING_COST = 99;
-
-export const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "8754671818@ybl";
-export const UPI_PAYEE_NAME = "Treyfa";

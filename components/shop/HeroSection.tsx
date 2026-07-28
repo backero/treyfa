@@ -10,15 +10,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Ranked by Flipkart reviews & ratings
 const slides = [
   {
     src:    "/hero-neem.png",
     alt:    "Neem Anti-Dandruff Shampoo & Conditioner",
     label:  "Neem Anti-Dandruff",
     sub:    "Shampoo & Conditioner",
-    rating: "4.1★",
-    reviews: "91 reviews",
     orb1:   "bg-green-300/40",
     orb2:   "bg-emerald-200/30",
     glow:   "from-green-400/50 via-emerald-300/60 to-green-400/50",
@@ -31,8 +28,6 @@ const slides = [
     alt:    "Coconut Henna Black Hair Oil",
     label:  "Henna Black",
     sub:    "Coconut Hair Oil",
-    rating: "4.2★",
-    reviews: "73 reviews",
     orb1:   "bg-amber-900/25",
     orb2:   "bg-orange-200/20",
     glow:   "from-amber-800/40 via-orange-700/50 to-amber-800/40",
@@ -45,8 +40,6 @@ const slides = [
     alt:    "Hibiscus Shikakai Shampoo",
     label:  "Hibiscus Shikakai",
     sub:    "Shampoo",
-    rating: "4.3★",
-    reviews: "41 reviews",
     orb1:   "bg-rose-300/30",
     orb2:   "bg-red-200/25",
     glow:   "from-rose-400/45 via-red-300/55 to-rose-400/45",
@@ -59,8 +52,6 @@ const slides = [
     alt:    "Coconut Vetiver Hair & Body Oil",
     label:  "Virgin Vetiver",
     sub:    "Hair & Body Oil",
-    rating: "4.8★",
-    reviews: "36 reviews",
     orb1:   "bg-yellow-200/35",
     orb2:   "bg-amber-100/25",
     glow:   "from-yellow-500/40 via-amber-400/50 to-yellow-500/40",
@@ -73,8 +64,6 @@ const slides = [
     alt:    "Coconut Basil Heaven Heal Oil",
     label:  "Basil Heaven",
     sub:    "Heal Oil",
-    rating: "4.9★",
-    reviews: "27 reviews",
     orb1:   "bg-lime-300/30",
     orb2:   "bg-green-200/25",
     glow:   "from-lime-500/40 via-green-400/50 to-lime-500/40",
@@ -84,7 +73,12 @@ const slides = [
   },
 ];
 
-export function HeroSection() {
+type Props = {
+  totalReviews: number;
+  avgRating: number;
+};
+
+export function HeroSection({ totalReviews, avgRating }: Props) {
   const sectionRef     = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const [current, setCurrent] = useState(0);
@@ -165,7 +159,7 @@ export function HeroSection() {
           ))}
         </div>
 
-        {/* Slide sub-label + live rating */}
+        {/* Slide sub-label */}
         <AnimatePresence mode="wait">
           <motion.div
             key={`lbl-${current}`}
@@ -177,11 +171,6 @@ export function HeroSection() {
           >
             <p className="text-[10px] uppercase tracking-[0.35em] text-gray-400">
               {slide.label} · {slide.sub}
-            </p>
-            <span className="h-3 w-px bg-gray-200" />
-            <p className="text-[10px] text-gray-400">
-              <span className="text-amber-500 font-medium">{slide.rating}</span>
-              {" "}· {slide.reviews}
             </p>
           </motion.div>
         </AnimatePresence>
@@ -215,9 +204,13 @@ export function HeroSection() {
           className="flex items-center gap-7 md:gap-10"
         >
           {[
-            { value: "500+", label: "Reviews"   },
-            { value: "100%", label: "Natural"   },
-            { value: "4.8★", label: "Avg Rating" },
+            { value: "100%", label: "Natural" },
+            ...(totalReviews > 0
+              ? [
+                  { value: `${totalReviews}`, label: "Reviews" },
+                  { value: `${avgRating.toFixed(1)}★`, label: "Avg Rating" },
+                ]
+              : []),
           ].map(({ value, label }, i) => (
             <div key={label} className="flex items-center gap-7 md:gap-10">
               {i > 0 && <div className="w-px h-7 bg-gray-200" />}

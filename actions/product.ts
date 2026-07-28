@@ -110,6 +110,18 @@ export async function getRelatedProducts(
   });
 }
 
+export async function getSiteReviewStats(): Promise<{ totalReviews: number; avgRating: number }> {
+  const agg = await prisma.review.aggregate({
+    _avg: { rating: true },
+    _count: true,
+  });
+
+  return {
+    totalReviews: agg._count,
+    avgRating: agg._avg.rating ?? 0,
+  };
+}
+
 export async function getCategories() {
   return prisma.category.findMany({
     where: { isActive: true },

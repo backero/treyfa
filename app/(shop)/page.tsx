@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductCardSkeleton } from "@/components/shop/ProductCardSkeleton";
-import { getFeaturedProducts } from "@/actions/product";
+import { getFeaturedProducts, getSiteReviewStats } from "@/actions/product";
 import { HeroSection } from "@/components/shop/HeroSection";
 import { FeaturesBar } from "@/components/shop/FeaturesBar";
 import { IngredientShowcase } from "@/components/shop/IngredientShowcase";
@@ -56,11 +56,13 @@ async function ProductScrollSection() {
   }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const reviewStats = await getSiteReviewStats().catch(() => ({ totalReviews: 0, avgRating: 0 }));
+
   return (
     <div>
       {/* 1. Hero */}
-      <HeroSection />
+      <HeroSection totalReviews={reviewStats.totalReviews} avgRating={reviewStats.avgRating} />
 
       {/* 2. Trust bar */}
       <FeaturesBar />

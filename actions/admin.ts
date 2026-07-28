@@ -201,20 +201,53 @@ export async function getAllOrders(page = 1, pageSize = 20): Promise<PaginatedRe
   return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
 }
 
+const RESTOCKING_STATUSES: OrderStatus[] = ["CANCELLED", "REFUNDED"];
+
 export async function updateOrderStatus(orderId: string, status: OrderStatus): Promise<ActionResult> {
   await requireAdmin();
 
-  const order = await prisma.order.findUnique({ where: { id: orderId }, select: { deliveredAt: true } });
-
-  await prisma.order.update({
+  const order = await prisma.order.findUnique({
     where: { id: orderId },
-    data: {
-      status,
-      deliveredAt: status === "DELIVERED" && !order?.deliveredAt ? new Date() : undefined,
+    select: {
+      status: true,
+      deliveredAt: true,
+      paymentMethod: true,
+      paymentStatus: true,
+      items: { select: { productId: true, quantity: true } },
     },
   });
+  if (!order) return { success: false, error: "Order not found" };
+
+  const wasRestocked = RESTOCKING_STATUSES.includes(order.status);
+  const willBeRestocked = RESTOCKING_STATUSES.includes(status);
+  // COD/legacy-UPI orders decrement stock immediately at checkout. Razorpay orders only
+  // decrement once paid (see finalizeRazorpayOrder) — an unpaid one never held stock,
+  // so cancelling it must not hand stock back that was never taken.
+  const stockIsReserved = order.paymentMethod !== "RAZORPAY" || order.paymentStatus === "PAID";
+
+  await prisma.$transaction([
+    prisma.order.update({
+      where: { id: orderId },
+      data: {
+        status,
+        deliveredAt: status === "DELIVERED" && !order.deliveredAt ? new Date() : undefined,
+      },
+    }),
+    // Cancelling/refunding an order returns its items to stock; reversing that decision takes it back out.
+    ...(willBeRestocked && !wasRestocked && stockIsReserved
+      ? order.items.map((item) =>
+          prisma.product.update({ where: { id: item.productId }, data: { stock: { increment: item.quantity } } })
+        )
+      : []),
+    ...(wasRestocked && !willBeRestocked && stockIsReserved
+      ? order.items.map((item) =>
+          prisma.product.update({ where: { id: item.productId }, data: { stock: { decrement: item.quantity } } })
+        )
+      : []),
+  ]);
 
   revalidatePath("/admin/orders");
+  revalidatePath("/products");
   return { success: true };
 }
 
