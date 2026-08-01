@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, Heart, Check, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ type Props = {
 
 export function AddToCartSection({ product }: Props) {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
   const isWishlisted = useSelector(selectIsWishlisted(product.id));
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
@@ -44,6 +47,9 @@ export function AddToCartSection({ product }: Props) {
       setAdded(true);
       toast.success("Added to cart!");
       setTimeout(() => setAdded(false), 2000);
+    } else if (result.requiresAuth) {
+      toast.error("Please sign in to add items to your cart");
+      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
     } else {
       toast.error(result.error ?? "Failed to add to cart");
     }

@@ -24,7 +24,7 @@ export async function addToCart(
 ): Promise<ActionResult> {
   const session = await auth();
   if (!session?.user?.id) {
-    return { success: false, error: "Please login to add items to cart" };
+    return { success: false, error: "Please login to add items to cart", requiresAuth: true };
   }
 
   const product = await prisma.product.findUnique({ where: { id: productId } });

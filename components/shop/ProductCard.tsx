@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { ProductWithCategory } from "@/types";
@@ -22,6 +23,8 @@ type Props = { product: ProductWithCategory };
 
 export function ProductCard({ product }: Props) {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
   const isWishlisted = useSelector(selectIsWishlisted(product.id));
   const [addingToCart, setAddingToCart] = useState(false);
   const [togglingWishlist, setTogglingWishlist] = useState(false);
@@ -50,6 +53,9 @@ export function ProductCard({ product }: Props) {
         setCartSuccess(true);
         toast.success("Added to cart");
         setTimeout(() => setCartSuccess(false), 1800);
+      } else if (result.requiresAuth) {
+        toast.error("Please sign in to add items to your cart");
+        router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
       } else {
         toast.error(result.error ?? "Failed to add to cart");
       }
