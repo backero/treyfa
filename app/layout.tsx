@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
 import { Toaster } from "sonner";
@@ -10,6 +11,7 @@ import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
+const GA_MEASUREMENT_ID = "G-67070VCC9N";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -132,6 +134,18 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <body>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         <JsonLd data={organizationJsonLd} />
         <JsonLd data={websiteJsonLd} />
         <SessionProvider session={session}>
