@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -7,9 +8,14 @@ async function main() {
   console.log("🌱 Seeding Treyfa database...");
 
   // ─── Users ───────────────────────────────────────────────────────────────
-  const adminPassword = await bcrypt.hash("admin123", 12);
+  // This file is committed to source control, so the admin account can never have a
+  // fixed default password — generate one per run (or take it from the environment)
+  // and print it once instead.
+  const adminPasswordPlain = process.env.SEED_ADMIN_PASSWORD || crypto.randomBytes(12).toString("hex");
+  const adminPassword = await bcrypt.hash(adminPasswordPlain, 12);
   const userPassword = await bcrypt.hash("user123", 12);
 
+  const adminExists = await prisma.user.findUnique({ where: { email: "admin@treyfa.in" } });
   await prisma.user.upsert({
     where: { email: "admin@treyfa.in" },
     update: {},
@@ -20,6 +26,9 @@ async function main() {
       role: "ADMIN",
     },
   });
+  if (!adminExists) {
+    console.log(`🔑 Created admin@treyfa.in with password: ${adminPasswordPlain} — save this now, it won't be shown again`);
+  }
 
   await prisma.user.upsert({
     where: { email: "user@treyfa.in" },
