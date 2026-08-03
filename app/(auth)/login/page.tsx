@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
 export default function LoginPage() {
@@ -18,6 +19,12 @@ export default function LoginPage() {
   const callbackUrl = searchParams.get("callbackUrl") ?? "/";
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  function handleGoogleSignIn() {
+    setGoogleLoading(true);
+    signIn("google", { callbackUrl });
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -53,6 +60,26 @@ export default function LoginPage() {
           </Link>
           <h1 className="text-2xl font-bold mt-6">Welcome back</h1>
           <p className="text-muted-foreground text-sm mt-1">Sign in to your account</p>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full mb-5"
+          onClick={handleGoogleSignIn}
+          disabled={googleLoading}
+        >
+          <FcGoogle className="h-4 w-4 mr-2" />
+          {googleLoading ? "Redirecting..." : "Continue with Google"}
+        </Button>
+
+        <div className="relative mb-5">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
