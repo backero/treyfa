@@ -1,44 +1,65 @@
 import { PageTransition } from "@/components/shared/PageTransition";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
-import { Leaf, Heart, Shield, Sparkles, MapPin } from "lucide-react";
+import {
+  Leaf,
+  ShieldBan,
+  FlaskConical,
+  Microscope,
+  ClipboardCheck,
+  BarChart3,
+  MapPin,
+  Factory,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Learn about Treyfa — India's natural & herbal beauty brand rooted in South Indian herbal traditions.",
+  description:
+    "Treyfa is Backero Private Limited's flagship clean beauty brand — 100% naturally derived, lab-validated personal care, free from parabens, sulfates, and synthetic chemicals.",
   alternates: { canonical: "/about" },
 };
 
-const values = [
+const cleanBeautyStandard = [
+  { title: "Zero Parabens", desc: "No methyl-, ethyl-, propyl-, or butylparabens — linked to hormone disruption." },
+  { title: "Zero Sulfates", desc: "No SLS / SLES — known irritants that cause scalp and skin sensitisation." },
+  { title: "Zero Phthalates", desc: "No DEP, DBP, or DEHP — endocrine disruptors found in synthetic fragrances." },
+  { title: "Zero Synthetic Colours", desc: "No petroleum-derived FD&C or D&C dyes." },
+  { title: "Zero Formaldehyde Donors", desc: "No DMDM hydantoin, quaternium-15, or related preservatives." },
+  { title: "Zero Mineral Oils", desc: "No petrolatum or paraffin — occlusive agents derived from crude petroleum." },
+  { title: "Zero Artificial Fragrances", desc: "No synthetic perfume compounds — a major allergen and sensitiser source." },
+  { title: "100% Naturally Derived", desc: "Every functional ingredient sourced from botanical, mineral, or bio-derived origins." },
+];
+
+const rndStages = [
   {
-    icon: Leaf,
-    title: "Pure Herbal Ingredients",
-    desc: "Every product is formulated with time-tested botanicals — Turmeric, Neem, Coconut, Hibiscus, and more — straight from nature.",
+    icon: Microscope,
+    title: "Ingredient Selection",
+    desc: "Evidence-based botanical selection with toxicological screening against INCI and IARC guidelines.",
   },
   {
-    icon: Shield,
-    title: "Chemical-Free Promise",
-    desc: "We are committed to clean beauty. Our formulas are free from sulfates, parabens, and harmful additives.",
+    icon: FlaskConical,
+    title: "Formulation & Stability",
+    desc: "Laboratory-scale formulation, refined through iterative testing and accelerated stability trials.",
   },
   {
-    icon: Heart,
-    title: "Self-Love Philosophy",
-    desc: "This is not just skincare. It's self-love. We believe true beauty comes from nourishing yourself with what nature intended.",
+    icon: ClipboardCheck,
+    title: "Safety Assessment",
+    desc: "Patch testing, skin compatibility, and irritancy evaluation before any product moves forward.",
   },
   {
-    icon: Sparkles,
-    title: "Traditionally Inspired",
-    desc: "Rooted in South Indian herbal remedies passed down through generations, reimagined for modern daily care.",
+    icon: BarChart3,
+    title: "Performance Benchmarking",
+    desc: "Every formula is benchmarked side-by-side against leading synthetic counterparts before it can launch.",
   },
 ];
 
 const timeline = [
-  { year: "2023", event: "Treyfa is founded in Coimbatore with a simple belief: herbal care should be accessible to everyone." },
-  { year: "2024", event: "Launched our signature Neem and Turmeric ranges, gaining a loyal customer base across South India." },
-  { year: "2025", event: "Expanded to 46+ products across Hair Care, Face Care, and Bath & Body, shipping pan-India." },
-  { year: "2026", event: "Building the next chapter — more formulas, more reach, same commitment to purity." },
+  { year: "2021", event: "Treyfa launches as Backero Private Limited's flagship clean beauty brand — a digital-first, direct-to-consumer herbal care line." },
+  { year: "2022", event: "Expands from pure D2C into omni-channel retail, building distributor relationships across South India." },
+  { year: "2024", event: "Scales nationally with 44+ products spanning Hair Care, Face Care, and Bath & Body." },
+  { year: "2026", event: "Consolidating the range with certified formulations and a dermatologist advisory panel — same commitment to purity, backed by science." },
 ];
 
 export default function AboutPage() {
@@ -54,13 +75,13 @@ export default function AboutPage() {
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="text-[10px] uppercase tracking-[0.45em] text-green-400 mb-4">Our Story</p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 md:mb-6">
-              Rooted in Nature,
-              <span className="block italic font-light text-white/35">Crafted with Care</span>
+              India&apos;s Number One
+              <span className="block italic font-light text-white/35">Cancer-Free Cosmetics</span>
             </h1>
             <p className="text-white/55 max-w-xl mx-auto leading-relaxed text-sm md:text-base">
-              Treyfa is India&apos;s natural and herbal beauty brand — founded in Coimbatore
-              with the belief that the best skincare and haircare ingredients grow in the earth,
-              not in a lab.
+              Treyfa is Backero Private Limited&apos;s flagship clean beauty brand — built on one
+              conviction: Indian consumers deserve daily personal care that is both safe and
+              effective, without toxic trade-offs.
             </p>
           </div>
         </section>
@@ -73,27 +94,27 @@ export default function AboutPage() {
                 Who We Are
               </p>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-5 md:mb-6">
-                Natural & Herbal
-                <span className="block italic font-light text-foreground/40">Beauty Essentials</span>
+                Clean Beauty,
+                <span className="block italic font-light text-foreground/40">Backed by Science</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4 text-sm md:text-base">
-                At Treyfa, we are passionate about harnessing the power of South Indian herbal
-                traditions. From the antibacterial properties of Neem to the brightening power
-                of Turmeric and the deep nourishment of Virgin Coconut Oil — each product is
-                a bridge between ancient wisdom and modern skincare science.
+                Launched in 2021, Treyfa is the commercial cornerstone of Backero Private
+                Limited&apos;s clean beauty mission — headquartered in Dindigul with manufacturing
+                in Coimbatore, Tamil Nadu. Every formula is 100% naturally derived and validated
+                through our in-house R&amp;D process, not just labelled &quot;natural.&quot;
               </p>
               <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                We believe &quot;this is not just skincare — it&apos;s self-love.&quot; When you choose
-                Treyfa, you choose transparency, purity, and a commitment to your long-term
-                skin and hair health.
+                Our mission: to make toxin-free, cancer-free personal care accessible, credible,
+                and high-performing for every Indian consumer — proving that &quot;natural&quot; and
+                &quot;effective&quot; are never mutually exclusive.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               {[
-                { value: "46+", label: "Products" },
-                { value: "10K+", label: "Happy Customers" },
-                { value: "100%", label: "Natural Ingredients" },
-                { value: "5★", label: "Average Rating" },
+                { value: "44+", label: "Products" },
+                { value: "2021", label: "Founded" },
+                { value: "100%", label: "Naturally Derived" },
+                { value: "8", label: "Zero-Compromise Pledges" },
               ].map(({ value, label }) => (
                 <div
                   key={label}
@@ -107,23 +128,27 @@ export default function AboutPage() {
           </div>
         </AnimatedSection>
 
-        {/* Values */}
+        {/* Clean Beauty Standard */}
         <AnimatedSection className="py-14 md:py-20 bg-secondary/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-10 md:mb-14">
               <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-3">
-                What We Stand For
+                No-Compromise Ingredient Policy
               </p>
-              <h2 className="text-2xl sm:text-3xl font-bold">Our Values</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold">The Treyfa Clean Beauty Standard</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 max-w-5xl mx-auto">
-              {values.map(({ icon: Icon, title, desc }) => (
+              {cleanBeautyStandard.map(({ title, desc }) => (
                 <div
                   key={title}
                   className="rounded-2xl border border-border bg-background p-5 md:p-6"
                 >
                   <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center mb-4">
-                    <Icon className="h-5 w-5" />
+                    {title === "100% Naturally Derived" ? (
+                      <Leaf className="h-5 w-5" />
+                    ) : (
+                      <ShieldBan className="h-5 w-5" />
+                    )}
                   </div>
                   <h3 className="font-semibold text-sm mb-2">{title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
@@ -133,48 +158,84 @@ export default function AboutPage() {
           </div>
         </AnimatedSection>
 
-        {/* Timeline */}
+        {/* R&D Process */}
         <AnimatedSection className="py-14 md:py-20 container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-10 md:mb-14">
-              <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-3">
-                Our Journey
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-bold">How It Started</h2>
-            </div>
-            <div className="relative pl-6 sm:pl-0">
-              {/* Vertical line — positioned relative to year column on sm+ */}
-              <div className="absolute left-0 sm:left-14 top-0 bottom-0 w-px bg-border" />
-              <div className="space-y-8 md:space-y-10">
-                {timeline.map(({ year, event }) => (
-                  <div key={year} className="flex gap-5 sm:gap-8 items-start">
-                    <div className="w-10 sm:w-14 flex-shrink-0 text-right hidden sm:block">
-                      <span className="text-sm font-bold">{year}</span>
+          <div className="text-center mb-10 md:mb-14">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-3">
+              Formulation Science
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold">Validated In-House, Not Just Labelled Natural</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 max-w-5xl mx-auto mb-10">
+            {rndStages.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="rounded-2xl border border-border bg-secondary/30 p-5 md:p-6">
+                <div className="h-10 w-10 rounded-xl bg-background flex items-center justify-center mb-4">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-semibold text-sm mb-2">{title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-sm italic text-muted-foreground max-w-2xl mx-auto">
+            &quot;If a Treyfa formulation cannot outperform its synthetic equivalent in lab
+            conditions, it does not go to market. We never compromise on efficacy in the name of
+            naturalness.&quot; — Backero R&amp;D Team
+          </p>
+        </AnimatedSection>
+
+        {/* Timeline */}
+        <AnimatedSection className="py-14 md:py-20 bg-secondary/20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-10 md:mb-14">
+                <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-3">
+                  Our Journey
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-bold">How It Started</h2>
+              </div>
+              <div className="relative pl-6 sm:pl-0">
+                <div className="absolute left-0 sm:left-14 top-0 bottom-0 w-px bg-border" />
+                <div className="space-y-8 md:space-y-10">
+                  {timeline.map(({ year, event }) => (
+                    <div key={year} className="flex gap-5 sm:gap-8 items-start">
+                      <div className="w-10 sm:w-14 flex-shrink-0 text-right hidden sm:block">
+                        <span className="text-sm font-bold">{year}</span>
+                      </div>
+                      <div className="relative flex-1">
+                        <div className="absolute -left-[25px] sm:-left-[25px] top-1.5 h-3 w-3 rounded-full bg-foreground ring-4 ring-background" />
+                        <span className="text-xs font-bold text-muted-foreground sm:hidden mb-1 block">{year}</span>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{event}</p>
+                      </div>
                     </div>
-                    <div className="relative flex-1">
-                      <div className="absolute -left-[25px] sm:-left-[25px] top-1.5 h-3 w-3 rounded-full bg-foreground ring-4 ring-background" />
-                      <span className="text-xs font-bold text-muted-foreground sm:hidden mb-1 block">{year}</span>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{event}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </AnimatedSection>
 
         {/* Location */}
-        <AnimatedSection className="py-14 md:py-20 bg-secondary/20">
-          <div className="container mx-auto px-4 text-center">
+        <AnimatedSection className="py-14 md:py-20 container mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-widest mb-4">
               <MapPin className="h-4 w-4" />
-              Find Us
+              Headquarters
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Based in Coimbatore</h2>
-            <p className="text-muted-foreground mb-2 text-sm md:text-base">
-              42, Interflex Complex, Trichy Road, Near RVS College of Arts & Science,
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Dindigul, Tamil Nadu</h2>
+            <p className="text-muted-foreground mb-8 text-sm md:text-base">
+              A brand by Backero Private Limited
+            </p>
+
+            <div className="inline-flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-widest mb-4">
+              <Factory className="h-4 w-4" />
+              Manufacturing &amp; Operations
+            </div>
+            <p className="text-muted-foreground mb-1 text-sm md:text-base">
+              42, Interflex Complex, Trichy Road, Near RVS College of Arts &amp; Science,
             </p>
             <p className="text-muted-foreground mb-8 text-sm md:text-base">Sulur, Coimbatore — 641402, Tamil Nadu, India</p>
+
             <Button asChild>
               <Link href="/contact">Get in Touch</Link>
             </Button>
