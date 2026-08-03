@@ -3,6 +3,7 @@ import { PageTransition } from "@/components/shared/PageTransition";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { CancelOrderButton } from "@/components/shop/CancelOrderButton";
 import { formatPrice, formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,8 @@ import { ArrowLeft, MapPin, Package } from "lucide-react";
 import type { Metadata } from "next";
 import { OrderStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
+
+const CANCELLABLE_STATUSES: OrderStatus[] = ["PENDING", "CONFIRMED", "PROCESSING"];
 
 export const metadata: Metadata = { title: "Order Details" };
 
@@ -115,6 +118,12 @@ export default async function OrderDetailsPage({
                 <span className="text-muted-foreground">GST</span>
                 <span>{formatPrice(order.tax)}</span>
               </div>
+              {order.discount > 0 && (
+                <div className="flex justify-between text-green-600">
+                  <span>Coupon{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+                  <span>-{formatPrice(order.discount)}</span>
+                </div>
+              )}
               <Separator className="my-2" />
               <div className="flex justify-between font-semibold">
                 <span>Total</span>
@@ -133,10 +142,16 @@ export default async function OrderDetailsPage({
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex gap-3">
           <Button variant="outline" asChild>
             <Link href="/products">Continue Shopping</Link>
           </Button>
+          {CANCELLABLE_STATUSES.includes(order.status) && (
+            <CancelOrderButton
+              orderId={order.id}
+              wasPaidOnline={order.paymentMethod === "RAZORPAY" && order.paymentStatus === "PAID"}
+            />
+          )}
         </div>
       </div>
     </PageTransition>

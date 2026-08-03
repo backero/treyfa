@@ -15,6 +15,7 @@ import {
   Store,
   BookOpen,
   MessageSquare,
+  Ticket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ const navItems = [
   { href: "/admin/products", icon: Package, label: "Products" },
   { href: "/admin/categories", icon: Tag, label: "Categories" },
   { href: "/admin/orders", icon: ShoppingBag, label: "Orders" },
+  { href: "/admin/coupons", icon: Ticket, label: "Coupons" },
   { href: "/admin/customers", icon: Users, label: "Customers" },
   { href: "/admin/blogs", icon: BookOpen, label: "Blog" },
   { href: "/admin/messages", icon: MessageSquare, label: "Messages" },

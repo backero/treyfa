@@ -42,6 +42,30 @@ export async function sendNewOrderEmail(order: {
   }
 }
 
+export async function sendPasswordResetEmail(email: string, resetUrl: string) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping password reset email");
+    return false;
+  }
+
+  try {
+    await resend.emails.send({
+      from: "Treyfa <onboarding@resend.dev>",
+      to: email,
+      subject: "Reset your Treyfa password",
+      html: `
+        <p>We received a request to reset your Treyfa account password.</p>
+        <p><a href="${resetUrl}">Click here to reset your password</a></p>
+        <p>This link expires in 1 hour. If you didn't request this, you can safely ignore this email.</p>
+      `,
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to send password reset email:", err);
+    return false;
+  }
+}
+
 export async function sendReviewRequestEmail(order: {
   id: string;
   customerName: string;

@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { refundPayment } from "@/lib/razorpay";
 import { ActionResult, DashboardStats, PaginatedResult, OrderWithDetails } from "@/types";
 import { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -180,6 +181,72 @@ export async function deleteCategory(id: string): Promise<ActionResult> {
   return { success: true };
 }
 
+// Coupon Management
+export async function getAllCoupons() {
+  await requireAdmin();
+  return prisma.coupon.findMany({ orderBy: { createdAt: "desc" } });
+}
+
+export async function createCoupon(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+
+  const code = (formData.get("code") as string).trim().toUpperCase();
+  const existing = await prisma.coupon.findUnique({ where: { code } });
+  if (existing) return { success: false, error: "A coupon with this code already exists" };
+
+  const expiresAtRaw = formData.get("expiresAt") as string;
+  const usageLimitRaw = formData.get("usageLimit") as string;
+  const minOrderValueRaw = formData.get("minOrderValue") as string;
+  const maxDiscountRaw = formData.get("maxDiscount") as string;
+
+  await prisma.coupon.create({
+    data: {
+      code,
+      discountType: formData.get("discountType") as "PERCENT" | "FIXED",
+      discountValue: Number(formData.get("discountValue")),
+      minOrderValue: minOrderValueRaw ? Number(minOrderValueRaw) : undefined,
+      maxDiscount: maxDiscountRaw ? Number(maxDiscountRaw) : undefined,
+      usageLimit: usageLimitRaw ? Number(usageLimitRaw) : undefined,
+      expiresAt: expiresAtRaw ? new Date(expiresAtRaw) : undefined,
+    },
+  });
+
+  revalidatePath("/admin/coupons");
+  return { success: true };
+}
+
+export async function updateCoupon(id: string, formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+
+  const expiresAtRaw = formData.get("expiresAt") as string;
+  const usageLimitRaw = formData.get("usageLimit") as string;
+  const minOrderValueRaw = formData.get("minOrderValue") as string;
+  const maxDiscountRaw = formData.get("maxDiscount") as string;
+
+  await prisma.coupon.update({
+    where: { id },
+    data: {
+      discountType: formData.get("discountType") as "PERCENT" | "FIXED",
+      discountValue: Number(formData.get("discountValue")),
+      minOrderValue: minOrderValueRaw ? Number(minOrderValueRaw) : null,
+      maxDiscount: maxDiscountRaw ? Number(maxDiscountRaw) : null,
+      usageLimit: usageLimitRaw ? Number(usageLimitRaw) : null,
+      expiresAt: expiresAtRaw ? new Date(expiresAtRaw) : null,
+      isActive: formData.get("isActive") === "true",
+    },
+  });
+
+  revalidatePath("/admin/coupons");
+  return { success: true };
+}
+
+export async function deleteCoupon(id: string): Promise<ActionResult> {
+  await requireAdmin();
+  await prisma.coupon.delete({ where: { id } });
+  revalidatePath("/admin/coupons");
+  return { success: true };
+}
+
 // Order Management
 export async function getAllOrders(page = 1, pageSize = 20): Promise<PaginatedResult<OrderWithDetails>> {
   await requireAdmin();
@@ -213,6 +280,8 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus): P
       deliveredAt: true,
       paymentMethod: true,
       paymentStatus: true,
+      paymentId: true,
+      total: true,
       items: { select: { productId: true, quantity: true } },
     },
   });
@@ -225,11 +294,26 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus): P
   // so cancelling it must not hand stock back that was never taken.
   const stockIsReserved = order.paymentMethod !== "RAZORPAY" || order.paymentStatus === "PAID";
 
+  // Actually move the money back through Razorpay before recording REFUNDED — otherwise
+  // the status just claims a refund happened while the customer's money never moved.
+  const needsRazorpayRefund =
+    status === "REFUNDED" &&
+    order.status !== "REFUNDED" &&
+    order.paymentMethod === "RAZORPAY" &&
+    order.paymentStatus === "PAID" &&
+    order.paymentId;
+
+  if (needsRazorpayRefund) {
+    const refundResult = await refundPayment(order.paymentId!, order.total);
+    if (!refundResult.success) return refundResult;
+  }
+
   await prisma.$transaction([
     prisma.order.update({
       where: { id: orderId },
       data: {
         status,
+        paymentStatus: needsRazorpayRefund ? "REFUNDED" : undefined,
         deliveredAt: status === "DELIVERED" && !order.deliveredAt ? new Date() : undefined,
       },
     }),

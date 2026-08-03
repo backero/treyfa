@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 const adminRoutes = ["/admin"];
-const authRoutes = ["/login", "/register"];
+const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
 const protectedRoutes = ["/checkout", "/orders", "/profile", "/wishlist"];
 
 export default auth((req) => {

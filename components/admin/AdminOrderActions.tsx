@@ -23,6 +23,7 @@ const statuses: OrderStatus[] = [
   "SHIPPED",
   "DELIVERED",
   "CANCELLED",
+  "REFUNDED",
 ];
 
 type Props = { order: OrderWithDetails };
@@ -38,7 +39,7 @@ export function AdminOrderActions({ order }: Props) {
       toast.success(`Order status updated to ${status}`);
       router.refresh();
     } else {
-      toast.error("Failed to update status");
+      toast.error(result.error ?? "Failed to update status");
     }
     setUpdating(false);
   }

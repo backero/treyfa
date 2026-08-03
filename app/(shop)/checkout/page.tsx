@@ -6,15 +6,22 @@ import { useSession } from "next-auth/react";
 import Script from "next/script";
 import { selectCartItems, setCartItems, clearCart } from "@/store/cartSlice";
 import { getCartItems } from "@/actions/cart";
-import { getUserAddresses, createCodOrder, createRazorpayOrder, verifyRazorpayPayment } from "@/actions/order";
+import {
+  getUserAddresses,
+  createCodOrder,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
+  validateCoupon,
+} from "@/actions/order";
 import { AddressForm } from "@/components/shop/CheckoutForm";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
 import Image from "next/image";
-import { MapPin, Check, CreditCard, Banknote } from "lucide-react";
+import { MapPin, Check, CreditCard, Banknote, Tag, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -55,11 +62,33 @@ export default function CheckoutPage() {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "RAZORPAY">("RAZORPAY");
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
   const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
-  const total = subtotal + shipping + tax;
+  const discount = appliedCoupon?.discount ?? 0;
+  const total = subtotal + shipping + tax - discount;
+
+  async function handleApplyCoupon() {
+    if (!couponInput.trim()) return;
+    setApplyingCoupon(true);
+    const result = await validateCoupon(couponInput, subtotal);
+    if (result.success && result.data) {
+      setAppliedCoupon(result.data);
+      toast.success(`Coupon "${result.data.code}" applied`);
+    } else {
+      toast.error(result.error ?? "Invalid coupon code");
+    }
+    setApplyingCoupon(false);
+  }
+
+  function handleRemoveCoupon() {
+    setAppliedCoupon(null);
+    setCouponInput("");
+  }
 
   useEffect(() => {
     getCartItems().then((cartItems) => {
@@ -99,7 +128,7 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     try {
-      const result = await createRazorpayOrder(selectedAddress);
+      const result = await createRazorpayOrder(selectedAddress, appliedCoupon?.code);
       if (!result.success || !result.data) {
         toast.error(result.error ?? "Failed to start payment");
         setProcessing(false);
@@ -160,7 +189,7 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     try {
-      const result = await createCodOrder(selectedAddress);
+      const result = await createCodOrder(selectedAddress, appliedCoupon?.code);
       if (!result.success || !result.data) {
         toast.error(result.error ?? "Failed to place order");
         setProcessing(false);
@@ -321,6 +350,44 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <Tag className="h-3.5 w-3.5" /> Have a coupon?
+                </p>
+                {appliedCoupon ? (
+                  <div className="flex items-center justify-between p-3 border border-green-600/30 bg-green-50 rounded-lg">
+                    <span className="text-sm font-medium text-green-700">
+                      {appliedCoupon.code} applied — -{formatPrice(appliedCoupon.discount)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-muted-foreground hover:text-foreground"
+                      aria-label="Remove coupon"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      value={couponInput}
+                      onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                      placeholder="Enter coupon code"
+                      className="uppercase"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleApplyCoupon}
+                      disabled={applyingCoupon || !couponInput.trim()}
+                    >
+                      {applyingCoupon ? "Applying..." : "Apply"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep("address")}>
                   Back
@@ -425,6 +492,12 @@ export default function CheckoutPage() {
                 <span className="text-muted-foreground">GST (18%)</span>
                 <span>{formatPrice(tax)}</span>
               </div>
+              {appliedCoupon && (
+                <div className="flex justify-between text-green-600">
+                  <span>Coupon ({appliedCoupon.code})</span>
+                  <span>-{formatPrice(appliedCoupon.discount)}</span>
+                </div>
+              )}
             </div>
             <Separator />
             <div className="flex justify-between font-semibold">
