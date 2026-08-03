@@ -1,6 +1,11 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
-import { formatPrice } from "@/lib/utils";
 import type { Order, OrderItem, Address } from "@prisma/client";
+
+// pdf-lib's standard fonts use WinAnsi encoding, which can't represent ₹ --
+// format amounts as plain "Rs." text instead of reusing the app's formatPrice.
+function formatInr(amount: number): string {
+  return `Rs. ${new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)}`;
+}
 
 const BUSINESS_NAME = "Treyfa (Backero Private Limited)";
 const BUSINESS_ADDRESS_LINES = [
@@ -84,8 +89,8 @@ export async function generateInvoicePdf(order: InvoiceOrder): Promise<Uint8Arra
     const truncatedName = item.name.length > 45 ? item.name.slice(0, 42) + "..." : item.name;
     draw(truncatedName, col.name, 9.5);
     draw(String(item.quantity), col.qty, 9.5);
-    draw(formatPrice(item.price), col.price, 9.5);
-    draw(formatPrice(item.price * item.quantity), col.amount, 9.5);
+    draw(formatInr(item.price), col.price, 9.5);
+    draw(formatInr(item.price * item.quantity), col.amount, 9.5);
     newLine(16);
   }
 
@@ -106,12 +111,12 @@ export async function generateInvoicePdf(order: InvoiceOrder): Promise<Uint8Arra
     newLine(16);
   };
 
-  drawTotalRow("Subtotal", formatPrice(order.subtotal));
+  drawTotalRow("Subtotal", formatInr(order.subtotal));
   if (order.discount > 0) {
-    drawTotalRow(`Discount${order.couponCode ? ` (${order.couponCode})` : ""}`, `-${formatPrice(order.discount)}`);
+    drawTotalRow(`Discount${order.couponCode ? ` (${order.couponCode})` : ""}`, `-${formatInr(order.discount)}`);
   }
-  drawTotalRow("Shipping", order.shipping === 0 ? "FREE" : formatPrice(order.shipping));
-  drawTotalRow("GST (18%)", formatPrice(order.tax));
+  drawTotalRow("Shipping", order.shipping === 0 ? "FREE" : formatInr(order.shipping));
+  drawTotalRow("GST (18%)", formatInr(order.tax));
   newLine(4);
   page.drawLine({
     start: { x: totalsX, y: y + 10 },
@@ -119,7 +124,7 @@ export async function generateInvoicePdf(order: InvoiceOrder): Promise<Uint8Arra
     thickness: 0.5,
     color: rgb(0.7, 0.7, 0.7),
   });
-  drawTotalRow("Total", formatPrice(order.total), true);
+  drawTotalRow("Total", formatInr(order.total), true);
   newLine(20);
 
   draw(`Payment Method: ${order.paymentMethod}`, marginX, 9.5);
