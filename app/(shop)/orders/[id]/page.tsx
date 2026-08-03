@@ -157,6 +157,11 @@ export default async function OrderDetailsPage({
           <Button variant="outline" asChild>
             <Link href="/products">Continue Shopping</Link>
           </Button>
+          <Button variant="outline" asChild>
+            <a href={`/api/orders/${order.id}/invoice`} target="_blank" rel="noopener noreferrer">
+              Download Invoice
+            </a>
+          </Button>
           {CANCELLABLE_STATUSES.includes(order.status) && (
             <CancelOrderButton
               orderId={order.id}
