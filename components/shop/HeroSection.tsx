@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -130,6 +130,19 @@ export function HeroSection({ totalReviews, avgRating }: Props) {
           LEFT — Text
       ══════════════════════════════════════════════════ */}
       <div className="relative z-10 flex items-center flex-col justify-center w-full lg:w-[50%] px-6 sm:px-10 lg:px-10 xl:px-14 pt-28 pb-8 lg:pt-24 lg:pb-24">
+
+        {/* Trust badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.05 }}
+          className="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-3.5 py-1.5 mb-4 md:mb-5 shadow-sm"
+        >
+          <ShieldCheck className="h-3 w-3 text-green-700 flex-shrink-0" />
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-gray-700">
+            India&apos;s Number One Cancer-Free Cosmetics
+          </span>
+        </motion.div>
 
         {/* Label — accent coloured */}
         <motion.p

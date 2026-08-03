@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Heart, Check, Minus, Plus } from "lucide-react";
+import { ShoppingCart, Heart, Check, Minus, Plus, ShieldBan, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductWithCategory } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,6 +168,20 @@ export function AddToCartSection({ product }: Props) {
         >
           <Heart className={cn("h-5 w-5", isWishlisted && "fill-red-500 text-red-500")} />
         </Button>
+      </div>
+
+      {/* Clean Beauty pledges */}
+      <div className="flex flex-wrap gap-x-4 gap-y-2 pt-1">
+        {["Zero Parabens", "Zero Sulfates", "Zero Phthalates", "100% Naturally Derived"].map((pledge) => (
+          <div key={pledge} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            {pledge === "100% Naturally Derived" ? (
+              <Leaf className="h-3 w-3 flex-shrink-0" />
+            ) : (
+              <ShieldBan className="h-3 w-3 flex-shrink-0" />
+            )}
+            {pledge}
+          </div>
+        ))}
       </div>
     </div>
   );
