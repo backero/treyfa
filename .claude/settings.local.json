@@ -32,7 +32,28 @@
       "Bash(npx tsx *)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ --max-time 15)",
       "Bash(curl -s http://localhost:3000/ --max-time 15)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npx next *)",
+      "Read(//c/Program Files/PostgreSQL/16/data/**)",
+      "Bash(grep -v \"^$\")",
+      "Bash(curl -s -o /dev/null -w \"product page: %{http_code}\\\\n\" \"https://treyfa.in/product/choco-coffee-face-wash-100ml\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"contact page: %{http_code}\\\\n\" \"https://treyfa.in/contact\" --max-time 15)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "WebFetch(domain:razorpay.com)",
+      "Bash(nslookup treyfa.in)",
+      "Bash(nslookup www.treyfa.in)",
+      "mcp__plugin_vercel_vercel__search_vercel_documentation",
+      "Bash(nslookup -type=A treyfa.in ns1.dns-parking.com)",
+      "Bash(nslookup -type=CNAME www.treyfa.in ns1.dns-parking.com)",
+      "Bash(nslookup treyfa.in 8.8.8.8)",
+      "Bash(nslookup www.treyfa.in 8.8.8.8)",
+      "Bash(agent-browser wait *)",
+      "Bash(agent-browser get *)",
+      "Bash(agent-browser snapshot *)",
+      "Bash(agent-browser network *)",
+      "Bash(agent-browser click *)"
     ]
   }
 }

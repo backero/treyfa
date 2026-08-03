@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -8,27 +7,9 @@ async function main() {
   console.log("🌱 Seeding Treyfa database...");
 
   // ─── Users ───────────────────────────────────────────────────────────────
-  // This file is committed to source control, so the admin account can never have a
-  // fixed default password — generate one per run (or take it from the environment)
-  // and print it once instead.
-  const adminPasswordPlain = process.env.SEED_ADMIN_PASSWORD || crypto.randomBytes(12).toString("hex");
-  const adminPassword = await bcrypt.hash(adminPasswordPlain, 12);
+  // Admin accounts are provisioned out-of-band (not seeded) so no admin
+  // credential — fixed or generated — ever lives in source control.
   const userPassword = await bcrypt.hash("user123", 12);
-
-  const adminExists = await prisma.user.findUnique({ where: { email: "admin@treyfa.in" } });
-  await prisma.user.upsert({
-    where: { email: "admin@treyfa.in" },
-    update: {},
-    create: {
-      email: "admin@treyfa.in",
-      name: "Treyfa Admin",
-      password: adminPassword,
-      role: "ADMIN",
-    },
-  });
-  if (!adminExists) {
-    console.log(`🔑 Created admin@treyfa.in with password: ${adminPasswordPlain} — save this now, it won't be shown again`);
-  }
 
   await prisma.user.upsert({
     where: { email: "user@treyfa.in" },
@@ -42,6 +23,46 @@ async function main() {
   });
 
   console.log("✅ Users created");
+
+  // ─── Reviewers (seed identities for product reviews) ───────────────────
+  const reviewerSeeds = [
+    { email: "priya.sharma@example.com", name: "Priya Sharma" },
+    { email: "ananya.iyer@example.com", name: "Ananya Iyer" },
+    { email: "kavya.reddy@example.com", name: "Kavya Reddy" },
+    { email: "sneha.nair@example.com", name: "Sneha Nair" },
+    { email: "divya.krishnan@example.com", name: "Divya Krishnan" },
+    { email: "meera.pillai@example.com", name: "Meera Pillai" },
+    { email: "aishwarya.rao@example.com", name: "Aishwarya Rao" },
+    { email: "lakshmi.venkatesan@example.com", name: "Lakshmi Venkatesan" },
+    { email: "pooja.subramaniam@example.com", name: "Pooja Subramaniam" },
+    { email: "ritika.menon@example.com", name: "Ritika Menon" },
+    { email: "vignesh.kumar@example.com", name: "Vignesh Kumar" },
+    { email: "abirami.raj@example.com", name: "Abirami Raj" },
+    { email: "santhosh.m@example.com", name: "Santhosh M" },
+    { email: "keerthana.v@example.com", name: "Keerthana V" },
+    { email: "prakash.raman@example.com", name: "Prakash Raman" },
+    { email: "swathi.balan@example.com", name: "Swathi Balan" },
+    { email: "arun.prasath@example.com", name: "Arun Prasath" },
+    { email: "nithya.sekar@example.com", name: "Nithya Sekar" },
+    { email: "hemalatha.d@example.com", name: "Hemalatha D" },
+    { email: "vijay.anand@example.com", name: "Vijay Anand" },
+    { email: "revathi.k@example.com", name: "Revathi K" },
+    { email: "saravanan.t@example.com", name: "Saravanan T" },
+    { email: "deepika.rajan@example.com", name: "Deepika Rajan" },
+    { email: "manoj.kumar@example.com", name: "Manoj Kumar" },
+  ];
+
+  const reviewers = [];
+  for (const reviewer of reviewerSeeds) {
+    const user = await prisma.user.upsert({
+      where: { email: reviewer.email },
+      update: {},
+      create: { email: reviewer.email, name: reviewer.name, role: "USER" },
+    });
+    reviewers.push(user);
+  }
+
+  console.log("✅ Reviewer accounts created");
 
   // ─── Categories ──────────────────────────────────────────────────────────
   const faceCareCat = await prisma.category.upsert({
@@ -884,23 +905,180 @@ async function main() {
   // Insert all products
   const allProducts = [...faceProducts, ...hairProducts, ...bathProducts];
   let created = 0;
+  const productBySlug = new Map<string, { id: string; slug: string }>();
   for (const product of allProducts) {
-    await prisma.product.upsert({
+    const record = await prisma.product.upsert({
       where: { slug: product.slug },
       update: {},
       create: product,
     });
+    productBySlug.set(record.slug, record);
     created++;
   }
 
   console.log(`✅ ${created} products created`);
+
+  // ─── Reviews ─────────────────────────────────────────────────────────────
+  const daysAgo = (n: number) => new Date(Date.now() - n * 24 * 60 * 60 * 1000);
+  // Spread review dates out over the last ~10 months instead of everything landing "today"
+  const dateOffsets = [4, 9, 15, 22, 29, 37, 46, 55, 64, 73, 83, 94, 105, 117, 129, 142, 156, 171, 187, 204, 222, 241, 261, 283];
+
+  const faceCareReviews: { rating: number; title: string | null; body: string }[] = [
+    { rating: 5, title: "Cleared up my skin fast", body: "been using this for like 3 weeks now, breakouts have calmed down a lot. doesn't dry out my skin like the other face washes i tried before" },
+    { rating: 5, title: null, body: "Lathers really well and my face doesn't feel tight after. chemical free feel pannuthu, love it" },
+    { rating: 4, title: "Takes a bit of time", body: "Noticed a diff only after 2 weeks tbh. smells nice tho and no irritation even for my sensitive skin" },
+    { rating: 5, title: "switched and never going back", body: "Was using a drugstore one before, this is on another level honestly. not that harsh chemical smell at all" },
+    { rating: 5, title: null, body: "good product, skin feels clean not stripped. will reorder" },
+    { rating: 4, title: "Decent", body: "does the job. nothing fancy but works well for daily use, price is also reasonable" },
+    { rating: 5, title: "my skin thanks me", body: "honestly didn't expect much but this actually reduced my pimples in under 2 weeks!! foam quality is also top" },
+    { rating: 3, title: "okay-ish", body: "works fine but didn't see the dramatic change everyone's talking about. still using it tho" },
+    { rating: 5, title: null, body: "Super gentle, doesn't burn my eyes if it gets in accidentally lol. good for daily use" },
+    { rating: 5, title: "finally something natural that works", body: "Tried so many face washes for my oily skin, this is the first one that controls oil without drying me out" },
+    { rating: 4, title: "nice fragrance", body: "smells great, cleanses well. wish the tube was bigger for the price but overall happy" },
+    { rating: 5, title: "repeat customer here", body: "3rd bottle now. my skin tone has actually evened out, less patchy than before" },
+    { rating: 5, title: null, body: "my mom uses this too now lol, we're both hooked. gentle on skin and smells amazing" },
+    { rating: 4, title: "good for oily skin", body: "controls oil the whole day almost. reapply once by evening but that's expected with any face wash" },
+    { rating: 5, title: "clear skin in weeks", body: "Genuinely happy with results, used consistently for a month and acne scars are fading too" },
+    { rating: 5, title: null, body: "cant believe this is chemical free, works better than the branded ones i used before" },
+  ];
+
+  const hairCareReviews: { rating: number; title: string | null; body: string }[] = [
+    { rating: 5, title: "Hair fall reduced a lot", body: "been oiling twice a week for a month now, way less hair on my pillow n comb. scalp feels calmer too" },
+    { rating: 5, title: null, body: "smell is so relaxing, hair feels stronger after every wash. highly recommend to anyone with damaged hair" },
+    { rating: 4, title: "good for dandruff", body: "dandruff has reduced a lot since i started, needs consistent use tho, not overnight magic" },
+    { rating: 5, title: "non greasy finally", body: "absorbs fast, doesn't leave that heavy oily look. hair looks shinier already after 2 washes" },
+    { rating: 5, title: null, body: "my hairfall has genuinely reduced, was skeptical at first but this actually works" },
+    { rating: 4, title: "takes patience", body: "see results but slowly. maybe 3-4 weeks of regular use before noticing real difference" },
+    { rating: 5, title: "scalp feels so much better", body: "used to have constant itching, that's gone now. hair also feels softer overall" },
+    { rating: 3, title: "average for me", body: "works ok but i didn't get the hair growth results others mentioned. maybe my hair type is different" },
+    { rating: 5, title: null, body: "love the herbal smell, not that fake perfume smell some other brands have" },
+    { rating: 5, title: "best hair oil i've tried", body: "strengthens from the roots, less breakage while combing. will keep repurchasing" },
+    { rating: 4, title: "good quality", body: "consistency is nice, not too thick not too watery. works well for scalp massage" },
+    { rating: 5, title: "visible hair growth", body: "new baby hairs coming near my hairline after using for 2 months straight, super happy" },
+    { rating: 5, title: null, body: "conditioner leaves my hair so soft and manageable, no more tangles after wash" },
+    { rating: 4, title: "nice for dry hair", body: "my hair was really dry before, this helped a lot with the frizz too" },
+    { rating: 5, title: "shine is unreal", body: "friends actually asked what i used on my hair lol, that says it all" },
+    { rating: 5, title: null, body: "reduced my hairfall within 3 washes itself, genuinely surprised" },
+    { rating: 4, title: "good but pricey", body: "works well, just wish it was slightly cheaper for the quantity. will still rebuy though" },
+    { rating: 5, title: "anti dandruff that actually works", body: "tried like 5 different shampoos before this, finally one that controls flakes without drying my scalp" },
+    { rating: 5, title: null, body: "my hair feels thicker somehow, could be placebo but i'm not complaining" },
+    { rating: 4, title: "solid everyday oil", body: "using this as my daily oil now, scalp doesn't feel greasy by evening like other oils do" },
+  ];
+
+  const bathBodyReviews: { rating: number; title: string | null; body: string }[] = [
+    { rating: 5, title: "Skin feels so soft", body: "part of my daily routine now, no sticky residue at all which i love" },
+    { rating: 4, title: "nice natural fragrance", body: "mild herbal smell, not overpowering. good for sensitive skin like mine" },
+    { rating: 5, title: "great value", body: "honestly surprised how well this works for the price, will be buying again" },
+    { rating: 5, title: null, body: "leaves my skin so smooth after shower, doesn't feel dry even in ac all day" },
+    { rating: 4, title: "good for daily use", body: "lathers nicely, doesn't strip my skin. smell fades a bit fast tho" },
+    { rating: 5, title: "whole family uses this now", body: "even my kids like the smell, gentle enough for everyone" },
+    { rating: 5, title: null, body: "skin feels nourished not just clean, big diff from regular soap" },
+    { rating: 3, title: "decent", body: "works fine, nothing extraordinary but does what it says" },
+    { rating: 5, title: "repurchased twice already", body: "this is my third bottle, consistently good every time" },
+    { rating: 4, title: "good texture", body: "not runny, not too thick either. easy to use daily" },
+    { rating: 5, title: null, body: "my skin feels so much better since switching to this, no more dryness after bath" },
+    { rating: 5, title: "herbal and effective", body: "love that it's natural, no chemical smell and actually works well" },
+  ];
+
+  // Extra closing remarks — appended to a review body only when the base pool has to be
+  // reused within a category, so two products never end up with byte-identical review text.
+  const extraRemarks = [
+    "will definitely buy again.",
+    "already recommended it to my sister.",
+    "shipping was quick too, no complaints there.",
+    "using it for a while now, still going strong.",
+    "smell lingers nicely through the day, love that.",
+    "ordered a second one already tbh.",
+    "worth the price honestly.",
+    "my mom asked me where i got it from lol.",
+    "packaging was neat too, no leakage during delivery.",
+    "been recommending this to my colleagues at work.",
+    "restocking this for sure.",
+    "no regrets buying this one.",
+    "glad i finally found something that works.",
+    "this one's a keeper.",
+    "wouldn't switch to anything else now.",
+    "took a chance on this and it paid off.",
+    "better than i expected honestly.",
+    "my second bottle and still loving it.",
+  ];
+
+  const reviewPoolByCategory = [
+    { products: faceProducts, pool: faceCareReviews },
+    { products: hairProducts, pool: hairCareReviews },
+    { products: bathProducts, pool: bathBodyReviews },
+  ];
+
+  let reviewerCursor = 0;
+  let reviewsCreated = 0;
+  for (const { products, pool } of reviewPoolByCategory) {
+    // Tracks how many times each pool slot has been used across the whole category, so the
+    // same review text never shows up twice — not just within one product line.
+    const useCountByIndex = new Map<number, number>();
+
+    for (const product of products) {
+      const record = productBySlug.get(product.slug);
+      if (!record) continue;
+
+      // 2-4 reviews per product, cycling through reviewers and the category's review pool
+      const reviewCount = 2 + (reviewerCursor % 3);
+      for (let i = 0; i < reviewCount; i++) {
+        const reviewer = reviewers[reviewerCursor % reviewers.length];
+
+        // Prefer a slot nobody's used yet; once the whole pool has been used once, allow
+        // reuse but the occurrence count below makes the resulting text distinct anyway.
+        let templateIndex = (reviewerCursor + i) % pool.length;
+        let attempts = 0;
+        while ((useCountByIndex.get(templateIndex) ?? 0) > 0 && attempts < pool.length) {
+          templateIndex = (templateIndex + 1) % pool.length;
+          attempts++;
+        }
+        const occurrence = useCountByIndex.get(templateIndex) ?? 0;
+        useCountByIndex.set(templateIndex, occurrence + 1);
+        const template = pool[templateIndex];
+        const body = occurrence === 0 ? template.body : `${template.body} ${extraRemarks[(occurrence - 1 + templateIndex) % extraRemarks.length]}`;
+
+        const reviewDate = daysAgo(dateOffsets[reviewsCreated % dateOffsets.length]);
+        reviewerCursor++;
+
+        await prisma.review.upsert({
+          where: { userId_productId: { userId: reviewer.id, productId: record.id } },
+          update: {},
+          create: {
+            userId: reviewer.id,
+            productId: record.id,
+            rating: template.rating,
+            title: template.title,
+            body,
+            isVerified: true,
+            createdAt: reviewDate,
+            updatedAt: reviewDate,
+          },
+        });
+        reviewsCreated++;
+      }
+
+      // Keep the product's denormalized rating/reviewCount in sync with its actual reviews
+      const agg = await prisma.review.aggregate({
+        where: { productId: record.id },
+        _avg: { rating: true },
+        _count: true,
+      });
+      await prisma.product.update({
+        where: { id: record.id },
+        data: { rating: agg._avg.rating ?? 0, reviewCount: agg._count },
+      });
+    }
+  }
+
+  console.log(`✅ ${reviewsCreated} reviews created`);
   console.log("\n🎉 Seed complete!");
   console.log("─────────────────────────────────");
-  console.log("Admin:  admin@treyfa.in  / admin123");
   console.log("User:   user@treyfa.in   / user123");
   console.log("─────────────────────────────────");
   console.log(`Categories: 3`);
   console.log(`Products:   ${created} (8 face care · ${hairProducts.length} hair care · 5 bath & body)`);
+  console.log(`Reviews:    ${reviewsCreated}`);
 }
 
 main()
