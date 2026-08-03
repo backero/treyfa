@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description: "Treyfa Terms and Conditions — rules governing website use and product purchases.",
+  keywords: ["treyfa terms and conditions"],
 };
 
 const sections = [

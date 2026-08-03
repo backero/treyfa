@@ -22,6 +22,7 @@ export async function generateMetadata({
     title: blog.title,
     description: blog.excerpt,
     alternates: { canonical: `/blog/${blog.slug}` },
+    keywords: [blog.category, ...blog.tags],
     openGraph: blog.coverImage
       ? { images: [{ url: blog.coverImage }] }
       : undefined,

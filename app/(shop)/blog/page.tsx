@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Journal — Treyfa",
   description: "Herbal beauty guides, ingredient deep-dives, and expert tips for your skin and hair.",
   alternates: { canonical: "/blog" },
+  keywords: ["herbal beauty blog", "natural skincare tips", "ayurvedic hair care guide", "treyfa journal"],
 };
 
 export default async function BlogPage() {

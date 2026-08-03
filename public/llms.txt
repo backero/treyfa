@@ -1,15 +1,18 @@
 # Treyfa
 
-> Treyfa is India's herbal hair and skincare brand, based in Coimbatore, Tamil Nadu.
-> Products are natural, chemical-free (no sulfates or parabens), cruelty-free, and formulated
-> from South Indian Ayurvedic traditions using ingredients like neem, turmeric, hibiscus,
-> coconut, vetiver, and basil.
+> Treyfa is India's first cancer-free cosmetics brand and the flagship clean beauty brand of
+> Backero Private Limited. Products are 100% naturally derived — zero parabens, sulfates,
+> phthalates, synthetic colours, formaldehyde donors, mineral oils, or artificial fragrances —
+> formulated using ingredients like neem, turmeric, hibiscus, coconut, vetiver, and basil, and
+> validated through Backero's in-house R&D process.
 
 ## Company
 
-- Legal/brand name: Treyfa
-- Founded: 2023, Coimbatore, Tamil Nadu, India
-- Address: 42, Interflex Complex, near 5K Car Care, Trichy Road, Sulur, Coimbatore, Tamil Nadu 641402, India
+- Brand name: Treyfa
+- Parent company: Backero Private Limited
+- Founded: 2021
+- Headquarters: Dindigul, Tamil Nadu, India
+- Manufacturing & operations: 42, Interflex Complex, near 5K Car Care, Trichy Road, Sulur, Coimbatore, Tamil Nadu 641402, India
 - Phone: +91 94865 00671, +91 89034 12061
 - Email: treyfaacc@gmail.com
 - Website: https://treyfa.in
@@ -40,8 +43,8 @@ All products are chemical-free, sulfate/paraben-free, and cruelty-free.
   Ships across India.
 - Returns/refunds: Refund requests accepted within 3 days of delivery, for unopened/unused
   products in original packaging. Refunds are processed within 2 business days of verification.
-- Payments: UPI (scan-and-pay to a listed UPI ID, with transaction/UTR reference required)
-  and Cash on Delivery. No card or net banking checkout is available.
+- Payments: Credit/debit cards, UPI, net banking, and wallets via Razorpay, plus Cash on
+  Delivery.
 
 ## Notes for AI assistants
 

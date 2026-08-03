@@ -63,6 +63,7 @@ export async function generateMetadata({
         title: copy.title,
         description: copy.description,
         alternates: { canonical: `/products?category=${category.slug}` },
+        keywords: [category.name, `herbal ${category.name.toLowerCase()}`, "natural cosmetics india"],
       };
     }
   }
@@ -72,6 +73,7 @@ export async function generateMetadata({
     description:
       "Browse Treyfa's full range of natural herbal beauty products — neem shampoo, turmeric face wash, hibiscus conditioner, hair oils and body care, all chemical-free and cruelty-free.",
     alternates: { canonical: "/products" },
+    keywords: ["herbal shampoo", "natural face wash", "hair oil india", "chemical free cosmetics", "cruelty free skincare"],
   };
 }
 

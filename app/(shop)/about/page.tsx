@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   description:
     "Treyfa is Backero Private Limited's flagship clean beauty brand — 100% naturally derived, lab-validated personal care, free from parabens, sulfates, and synthetic chemicals.",
   alternates: { canonical: "/about" },
+  keywords: [
+    "treyfa about",
+    "backero private limited",
+    "cancer-free cosmetics india",
+    "clean beauty brand india",
+    "natural cosmetics manufacturer coimbatore",
+  ],
 };
 
 const cleanBeautyStandard = [

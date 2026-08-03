@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Refund & Shipping Policy",
   description: "Treyfa Refund and Shipping Policy — hassle-free returns and fast delivery across India.",
+  keywords: ["treyfa refund policy", "treyfa shipping policy"],
 };
 
 export default function RefundShippingPage() {

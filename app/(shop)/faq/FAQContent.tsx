@@ -43,7 +43,7 @@ const faqs = [
       },
       {
         q: "How do I track my order?",
-        a: "Once your order is shipped, you will receive a tracking link via email and SMS. You can use this link to monitor your delivery in real time.",
+        a: "Once your order is shipped, the courier and tracking number will appear on your order details page under My Orders — no separate tracking link needed.",
       },
       {
         q: "Do you deliver outside India?",
@@ -77,11 +77,11 @@ const faqs = [
     items: [
       {
         q: "What payment methods do you accept?",
-        a: "We accept UPI payments (Google Pay, PhonePe, Paytm, or any UPI app) and Cash on Delivery.",
+        a: "We accept Credit/Debit Cards, UPI (Google Pay, PhonePe, Paytm, or any UPI app), Net Banking, and Cash on Delivery — online payments are securely processed via Razorpay.",
       },
       {
-        q: "Is it safe to pay via UPI?",
-        a: "Yes. You pay directly to our verified UPI ID from your own UPI app, and we confirm your order against the transaction reference number you provide — no card or banking details are ever shared with us.",
+        q: "Is it safe to pay online?",
+        a: "Yes. All online payments are processed through Razorpay, a PCI-DSS compliant payment gateway. Your card, UPI, and banking details are never stored on our servers.",
       },
       {
         q: "Do I need an account to place an order?",
