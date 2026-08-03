@@ -23,7 +23,7 @@ export default function RefundShippingPage() {
           {[
             { icon: RefreshCw, label: "Refund Window", value: "3 Days" },
             { icon: Truck, label: "Standard Delivery", value: "2–5 Days" },
-            { icon: Package, label: "Free Shipping", value: "Above ₹999" },
+            { icon: Package, label: "Free Shipping", value: "Online, or COD above ₹300" },
             { icon: Mail, label: "Refund Processed", value: "2 Bus. Days" },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="rounded-xl border border-border bg-secondary/20 p-4 text-center">
@@ -120,7 +120,7 @@ export default function RefundShippingPage() {
                       <tr>
                         <td className="px-4 py-3 text-muted-foreground">Standard Shipping</td>
                         <td className="px-4 py-3 text-muted-foreground">2–5 business days</td>
-                        <td className="px-4 py-3 text-muted-foreground">Free above ₹999 (₹99 below)</td>
+                        <td className="px-4 py-3 text-muted-foreground">Free with online payment. COD: free above ₹300 (₹99 below)</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 text-muted-foreground">Express Shipping</td>

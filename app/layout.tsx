@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s | Treyfa",
   },
   description:
-    "India's premier herbal hair and skincare brand. Natural, chemical-free neem shampoo, turmeric face wash, hibiscus conditioner and hair oils rooted in South Indian Ayurvedic tradition. Shop online with free shipping over ₹999.",
+    "India's premier herbal hair and skincare brand. Natural, chemical-free neem shampoo, turmeric face wash, hibiscus conditioner and hair oils rooted in South Indian Ayurvedic tradition. Shop online with free shipping over ₹300.",
   keywords: [
     "herbal skincare",
     "neem shampoo",

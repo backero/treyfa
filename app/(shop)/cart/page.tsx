@@ -6,8 +6,7 @@ import { selectCartItems, setCartItems } from "@/store/cartSlice";
 import { CartItemCard } from "@/components/shop/CartItem";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/utils";
-import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
+import { formatPrice, TAX_RATE, FREE_SHIPPING_THRESHOLD, calculateShipping } from "@/lib/utils";
 import Link from "next/link";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +37,7 @@ export default function CartPage() {
   }, [dispatch]);
 
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : subtotal > 0 ? SHIPPING_COST : 0;
+  const shipping = subtotal > 0 ? calculateShipping(subtotal, "COD") : 0;
   const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
   const total = subtotal + shipping + tax;
 
@@ -99,12 +98,13 @@ export default function CartPage() {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">GST (18%)</span>
+                <span className="text-muted-foreground">GST (5%)</span>
                 <span>{formatPrice(tax)}</span>
               </div>
               {shipping > 0 && (
                 <p className="text-xs text-muted-foreground bg-amber-50 border border-amber-100 rounded-lg p-2">
-                  Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for free shipping!
+                  Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for free COD shipping —
+                  or pay online at checkout and shipping is always free.
                 </p>
               )}
             </div>

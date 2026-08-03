@@ -39,7 +39,7 @@ const faqs = [
       },
       {
         q: "Is there free shipping?",
-        a: "Yes! We offer free shipping on all orders over ₹999. For orders below this amount, a standard shipping fee of ₹99 applies at checkout.",
+        a: "Yes! Orders paid online (card, UPI, net banking, or wallet) always ship free, regardless of order value. For Cash on Delivery orders, shipping is free above ₹300 — below that, a ₹99 shipping fee applies.",
       },
       {
         q: "How do I track my order?",

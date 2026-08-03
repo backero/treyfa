@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Truck, Shield, RotateCcw, Zap } from "lucide-react";
 
 const features = [
-  { icon: Truck,     label: "Free Shipping",         desc: "On orders over ₹999"        },
+  { icon: Truck,     label: "Free Shipping",         desc: "Online, or COD over ₹300"   },
   { icon: Shield,    label: "Cancer-Free Cosmetics",  desc: "India's 1st certified brand" },
   { icon: RotateCcw, label: "Easy Returns",           desc: "30-day return policy"        },
   { icon: Zap,       label: "Fast Delivery",          desc: "2–5 business days"           },

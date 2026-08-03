@@ -18,8 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice } from "@/lib/utils";
-import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
+import { formatPrice, TAX_RATE, calculateShipping } from "@/lib/utils";
 import Image from "next/image";
 import { MapPin, Check, CreditCard, Banknote, Tag, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -67,7 +66,7 @@ export default function CheckoutPage() {
   const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const shipping = calculateShipping(subtotal, paymentMethod);
   const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
   const discount = appliedCoupon?.discount ?? 0;
   const total = subtotal + shipping + tax - discount;
@@ -489,7 +488,7 @@ export default function CheckoutPage() {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">GST (18%)</span>
+                <span className="text-muted-foreground">GST (5%)</span>
                 <span>{formatPrice(tax)}</span>
               </div>
               {appliedCoupon && (

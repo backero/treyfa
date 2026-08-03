@@ -20,7 +20,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Treyfa — Natural Herbal Shampoo, Face Wash & Hair Oil Online",
   description:
-    "Shop Treyfa's natural herbal skincare and hair care — neem shampoo, turmeric face wash, hibiscus conditioner & more. Chemical-free, cruelty-free, made in India. Free shipping over ₹999.",
+    "Shop Treyfa's natural herbal skincare and hair care — neem shampoo, turmeric face wash, hibiscus conditioner & more. Chemical-free, cruelty-free, made in India. Free shipping over ₹300.",
 };
 
 async function FeaturedProducts() {
@@ -131,7 +131,7 @@ export default async function HomePage() {
               Nature&apos;s Best, Delivered
             </h2>
             <p className="text-background/60 mb-8 max-w-md mx-auto">
-              Experience the power of pure botanical ingredients. Free shipping on all orders over ₹999.
+              Experience the power of pure botanical ingredients. Free shipping on all orders over ₹300.
             </p>
             <Button
               size="lg"

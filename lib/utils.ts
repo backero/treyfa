@@ -48,6 +48,12 @@ export function generateOrderId(): string {
   return `ORD-${timestamp}-${random}`;
 }
 
-export const TAX_RATE = 0.18; // 18% GST
-export const FREE_SHIPPING_THRESHOLD = 999;
+export const TAX_RATE = 0.05; // 5% GST
+export const FREE_SHIPPING_THRESHOLD = 300;
 export const SHIPPING_COST = 99;
+
+// Online payments always ship free; COD only ships free once the order clears the threshold.
+export function calculateShipping(subtotal: number, paymentMethod: "COD" | "RAZORPAY"): number {
+  if (paymentMethod === "RAZORPAY") return 0;
+  return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+}

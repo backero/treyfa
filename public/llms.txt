@@ -38,9 +38,11 @@ All products are chemical-free, sulfate/paraben-free, and cruelty-free.
 
 ## Policies
 
-- Shipping: Orders processed within 2 business days. Standard delivery 2-5 business days
-  (free above ₹999, ₹99 otherwise). Express delivery 3-4 business days for an additional fee.
-  Ships across India.
+- Shipping: Orders processed within 2 business days. Standard delivery 2-5 business days.
+  Free shipping on all orders paid online (card/UPI/net banking/wallet). Cash on Delivery
+  orders ship free above ₹300 (₹99 below). Express delivery 3-4 business days for an
+  additional fee. Ships across India.
+- Tax: 5% GST included in the displayed price breakdown at checkout.
 - Returns/refunds: Refund requests accepted within 3 days of delivery, for unopened/unused
   products in original packaging. Refunds are processed within 2 business days of verification.
 - Payments: Credit/debit cards, UPI, net banking, and wallets via Razorpay, plus Cash on

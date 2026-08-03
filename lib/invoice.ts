@@ -116,7 +116,7 @@ export async function generateInvoicePdf(order: InvoiceOrder): Promise<Uint8Arra
     drawTotalRow(`Discount${order.couponCode ? ` (${order.couponCode})` : ""}`, `-${formatInr(order.discount)}`);
   }
   drawTotalRow("Shipping", order.shipping === 0 ? "FREE" : formatInr(order.shipping));
-  drawTotalRow("GST (18%)", formatInr(order.tax));
+  drawTotalRow("GST (5%)", formatInr(order.tax));
   newLine(4);
   page.drawLine({
     start: { x: totalsX, y: y + 10 },

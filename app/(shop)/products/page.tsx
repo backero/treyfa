@@ -22,17 +22,17 @@ const categorySeoCopy: Record<string, { title: string; description: string }> = 
   "hair-care": {
     title: "Herbal Hair Care Products Online — Shampoo, Hair Oil & Conditioner",
     description:
-      "Shop Treyfa's herbal hair care range — neem anti-dandruff shampoo, hibiscus hair oil for growth, curry leaves oil for hair fall, and henna black hair oil. Natural, chemical-free. Free shipping over ₹999.",
+      "Shop Treyfa's herbal hair care range — neem anti-dandruff shampoo, hibiscus hair oil for growth, curry leaves oil for hair fall, and henna black hair oil. Natural, chemical-free. Free shipping over ₹300.",
   },
   "face-care": {
     title: "Herbal Face Wash & Face Care Products Online",
     description:
-      "Shop Treyfa's herbal face care range — turmeric face wash for glowing skin, neem face wash for acne control, and choco coffee face wash for dull skin. Natural, chemical-free. Free shipping over ₹999.",
+      "Shop Treyfa's herbal face care range — turmeric face wash for glowing skin, neem face wash for acne control, and choco coffee face wash for dull skin. Natural, chemical-free. Free shipping over ₹300.",
   },
   "bath-body-care": {
     title: "Herbal Bath & Body Care Products Online — Body Oil & Wash",
     description:
-      "Shop Treyfa's herbal bath & body care range — nourishing body oils and gentle, natural cleansers for daily skin care. Chemical-free and cruelty-free. Free shipping over ₹999.",
+      "Shop Treyfa's herbal bath & body care range — nourishing body oils and gentle, natural cleansers for daily skin care. Chemical-free and cruelty-free. Free shipping over ₹300.",
   },
 };
 
@@ -57,7 +57,7 @@ export async function generateMetadata({
     if (category) {
       const copy = categorySeoCopy[category.slug] ?? {
         title: `${category.name} — Herbal ${category.name} Products`,
-        description: `Shop Treyfa's ${category.name.toLowerCase()} range — natural, herbal, chemical-free and cruelty-free. Free shipping over ₹999.`,
+        description: `Shop Treyfa's ${category.name.toLowerCase()} range — natural, herbal, chemical-free and cruelty-free. Free shipping over ₹300.`,
       };
       return {
         title: copy.title,

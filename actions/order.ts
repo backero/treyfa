@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { razorpay, refundPayment } from "@/lib/razorpay";
 import { ActionResult, OrderWithDetails } from "@/types";
-import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/utils";
+import { TAX_RATE, calculateShipping } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { sendNewOrderEmail } from "@/lib/resend";
 import type { Order, OrderItem, Coupon } from "@prisma/client";
@@ -40,7 +40,12 @@ export async function validateCoupon(
   return { success: true, data: { discount: result.discount, code: result.coupon.code } };
 }
 
-async function loadCheckoutContext(userId: string, addressId: string, couponCode?: string) {
+async function loadCheckoutContext(
+  userId: string,
+  addressId: string,
+  paymentMethod: "COD" | "RAZORPAY",
+  couponCode?: string
+) {
   const cartItems = await prisma.cartItem.findMany({
     where: { userId },
     include: { product: true },
@@ -51,7 +56,7 @@ async function loadCheckoutContext(userId: string, addressId: string, couponCode
   if (!address) return { error: "Address not found" } as const;
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const shipping = calculateShipping(subtotal, paymentMethod);
   const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
 
   let discount = 0;
@@ -103,7 +108,7 @@ export async function createCodOrder(
   const session = await auth();
   if (!session?.user?.id) return { success: false, error: "Unauthorized" };
 
-  const ctx = await loadCheckoutContext(session.user.id, addressId, couponCode);
+  const ctx = await loadCheckoutContext(session.user.id, addressId, "COD", couponCode);
   if ("error" in ctx) return { success: false, error: ctx.error };
   const { cartItems, subtotal, shipping, tax, discount, couponCode: appliedCode, total } = ctx;
 
@@ -175,7 +180,7 @@ export async function createRazorpayOrder(
     return { success: false, error: "Online payment is not configured" };
   }
 
-  const ctx = await loadCheckoutContext(session.user.id, addressId, couponCode);
+  const ctx = await loadCheckoutContext(session.user.id, addressId, "RAZORPAY", couponCode);
   if ("error" in ctx) return { success: false, error: ctx.error };
   const { cartItems, subtotal, shipping, tax, discount, couponCode: appliedCode, total } = ctx;
 

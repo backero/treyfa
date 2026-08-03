@@ -126,7 +126,7 @@ export function ProductDetailContent({ product, reviews, existingReview, initial
         className="space-y-2.5 pt-1"
       >
         {[
-          { icon: Truck, text: "Free delivery on orders over ₹999" },
+          { icon: Truck, text: "Free delivery online, or COD over ₹300" },
           { icon: Shield, text: "100% authentic product guarantee" },
           { icon: CheckCircle, text: "Easy 30-day returns" },
         ].map(({ icon: Icon, text }) => (
