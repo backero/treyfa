@@ -67,6 +67,7 @@ export type DashboardStats = {
   totalUsers: number;
   recentOrders: OrderWithDetails[];
   revenueByMonth: { month: string; revenue: number }[];
+  lowStockProducts: { id: string; name: string; stock: number }[];
 };
 
 export type ActionResult<T = void> = {

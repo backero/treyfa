@@ -62,6 +62,17 @@ export default async function OrderDetailsPage({
           <Badge variant={config.variant as any}>{config.label}</Badge>
         </div>
 
+        {order.trackingNumber && (
+          <div className="mb-6 p-4 border border-border rounded-xl bg-secondary/20 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">
+                {order.carrier ? `Shipped via ${order.carrier}` : "Tracking Number"}
+              </p>
+              <p className="text-sm font-medium mt-0.5">{order.trackingNumber}</p>
+            </div>
+          </div>
+        )}
+
         <div className="border border-border rounded-xl overflow-hidden">
           <div className="px-5 py-4 bg-secondary/30 flex items-center gap-2">
             <Package className="h-4 w-4" />

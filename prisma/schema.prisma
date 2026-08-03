@@ -49,6 +49,9 @@ model User {
   image         String?
   phone         String?
   role          Role      @default(USER)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  cartReminderSentAt  DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -209,6 +212,8 @@ model Order {
   couponCode      String?
   total           Float
   notes           String?
+  trackingNumber  String?
+  carrier         String?
   deliveredAt         DateTime?
   reviewRequestSentAt DateTime?
 

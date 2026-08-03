@@ -19,7 +19,9 @@ async function requireAdmin() {
 export async function getDashboardStats(): Promise<DashboardStats> {
   await requireAdmin();
 
-  const [totalRevenue, totalOrders, totalProducts, totalUsers, recentOrders] = await Promise.all([
+  const LOW_STOCK_THRESHOLD = 10;
+
+  const [totalRevenue, totalOrders, totalProducts, totalUsers, recentOrders, lowStockProducts] = await Promise.all([
     prisma.order.aggregate({
       where: { paymentStatus: "PAID" },
       _sum: { total: true },
@@ -35,6 +37,12 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         address: true,
         user: true,
       },
+    }),
+    prisma.product.findMany({
+      where: { isActive: true, stock: { lte: LOW_STOCK_THRESHOLD } },
+      select: { id: true, name: true, stock: true },
+      orderBy: { stock: "asc" },
+      take: 10,
     }),
   ]);
 
@@ -72,6 +80,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     totalUsers,
     recentOrders,
     revenueByMonth,
+    lowStockProducts,
   };
 }
 
@@ -332,6 +341,23 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus): P
 
   revalidatePath("/admin/orders");
   revalidatePath("/products");
+  return { success: true };
+}
+
+export async function updateOrderTracking(
+  orderId: string,
+  trackingNumber: string,
+  carrier: string
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { trackingNumber: trackingNumber || null, carrier: carrier || null },
+  });
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/orders");
   return { success: true };
 }
 

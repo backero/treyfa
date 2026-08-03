@@ -7,9 +7,23 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { z } from "zod";
 import { AuthError } from "next-auth";
-import { sendPasswordResetEmail } from "@/lib/resend";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/resend";
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+
+async function issueVerificationEmail(email: string) {
+  const token = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + VERIFY_TOKEN_TTL_MS);
+  const identifier = `verify:${email}`;
+
+  await prisma.verificationToken.deleteMany({ where: { identifier } });
+  await prisma.verificationToken.create({ data: { identifier, token, expires } });
+
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
+  const verifyUrl = `${siteUrl}/verify-email?token=${token}&email=${encodeURIComponent(email)}`;
+  await sendVerificationEmail(email, verifyUrl);
+}
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -41,6 +55,24 @@ export async function registerUser(formData: FormData): Promise<ActionResult> {
   await prisma.user.create({
     data: { name, email, password: hashedPassword },
   });
+
+  await issueVerificationEmail(email);
+
+  return { success: true };
+}
+
+export async function verifyEmail(email: string, token: string): Promise<ActionResult> {
+  const identifier = `verify:${email}`;
+  const record = await prisma.verificationToken.findUnique({
+    where: { identifier_token: { identifier, token } },
+  });
+
+  if (!record || record.expires < new Date()) {
+    return { success: false, error: "This verification link is invalid or has expired" };
+  }
+
+  await prisma.user.update({ where: { email }, data: { emailVerified: new Date() } });
+  await prisma.verificationToken.delete({ where: { identifier_token: { identifier, token } } });
 
   return { success: true };
 }

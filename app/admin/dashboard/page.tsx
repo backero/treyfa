@@ -3,6 +3,7 @@ import { DashboardStatsCards } from "@/components/admin/DashboardStats";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
+import { AlertTriangle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -30,6 +31,28 @@ export default async function DashboardPage() {
       </div>
 
       <DashboardStatsCards stats={stats} />
+
+      {/* Low Stock Alert */}
+      {stats.lowStockProducts.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+            <h2 className="font-semibold text-amber-900">Low Stock</h2>
+          </div>
+          <div className="space-y-2">
+            {stats.lowStockProducts.map((p) => (
+              <div key={p.id} className="flex items-center justify-between text-sm">
+                <Link href={`/admin/products/${p.id}/edit`} className="text-amber-900 hover:underline">
+                  {p.name}
+                </Link>
+                <span className={`font-medium ${p.stock === 0 ? "text-red-600" : "text-amber-700"}`}>
+                  {p.stock === 0 ? "Out of stock" : `${p.stock} left`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Revenue Chart */}
       <div className="bg-background border border-border rounded-xl p-5">

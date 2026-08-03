@@ -42,6 +42,30 @@ export async function sendNewOrderEmail(order: {
   }
 }
 
+export async function sendVerificationEmail(email: string, verifyUrl: string) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping verification email");
+    return false;
+  }
+
+  try {
+    await resend.emails.send({
+      from: "Treyfa <onboarding@resend.dev>",
+      to: email,
+      subject: "Verify your Treyfa email address",
+      html: `
+        <p>Welcome to Treyfa! Please confirm this is your email address.</p>
+        <p><a href="${verifyUrl}">Verify my email</a></p>
+        <p>This link expires in 24 hours.</p>
+      `,
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to send verification email:", err);
+    return false;
+  }
+}
+
 export async function sendPasswordResetEmail(email: string, resetUrl: string) {
   if (!resend) {
     console.warn("RESEND_API_KEY not set — skipping password reset email");
@@ -62,6 +86,41 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string) {
     return true;
   } catch (err) {
     console.error("Failed to send password reset email:", err);
+    return false;
+  }
+}
+
+export async function sendAbandonedCartEmail(cart: {
+  customerName: string;
+  customerEmail: string;
+  items: { name: string; slug: string; quantity: number; price: number }[];
+}) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping abandoned cart email");
+    return false;
+  }
+  if (!cart.customerEmail) return false;
+
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://treyfa.in";
+  const itemsHtml = cart.items
+    .map((i) => `<li>${i.name} × ${i.quantity} — ₹${(i.price * i.quantity).toFixed(2)}</li>`)
+    .join("");
+
+  try {
+    await resend.emails.send({
+      from: "Treyfa <onboarding@resend.dev>",
+      to: cart.customerEmail,
+      subject: "You left something in your cart",
+      html: `
+        <p>Hi ${cart.customerName || "there"},</p>
+        <p>You've still got these waiting in your cart:</p>
+        <ul>${itemsHtml}</ul>
+        <p><a href="${siteUrl}/cart">Complete your order</a></p>
+      `,
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to send abandoned cart email:", err);
     return false;
   }
 }
