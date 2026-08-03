@@ -140,7 +140,7 @@ export function HeroSection({ totalReviews, avgRating }: Props) {
         >
           <ShieldCheck className="h-3 w-3 text-green-700 flex-shrink-0" />
           <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-gray-700">
-            India&apos;s Number One Cancer-Free Cosmetics
+            India&apos;s First Cancer-Free Cosmetics
           </span>
         </motion.div>
 

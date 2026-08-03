@@ -75,7 +75,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="text-[10px] uppercase tracking-[0.45em] text-green-400 mb-4">Our Story</p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 md:mb-6">
-              India&apos;s Number One
+              India&apos;s First
               <span className="block italic font-light text-white/35">Cancer-Free Cosmetics</span>
             </h1>
             <p className="text-white/55 max-w-xl mx-auto leading-relaxed text-sm md:text-base">
