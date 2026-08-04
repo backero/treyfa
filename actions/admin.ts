@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { refundPayment } from "@/lib/razorpay";
 import { ActionResult, DashboardStats, PaginatedResult, OrderWithDetails } from "@/types";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { slugify } from "@/lib/utils";
 
@@ -141,9 +141,24 @@ export async function updateProduct(id: string, formData: FormData): Promise<Act
 
 export async function deleteProduct(id: string): Promise<ActionResult> {
   await requireAdmin();
-  await prisma.product.update({ where: { id }, data: { isActive: false } });
-  revalidatePath("/admin/products");
-  return { success: true };
+
+  try {
+    await prisma.product.delete({ where: { id } });
+    revalidatePath("/admin/products");
+    revalidatePath("/products");
+    return { success: true };
+  } catch (err) {
+    // Products that have been ordered can't be hard-deleted -- OrderItem
+    // keeps a required reference to them so past invoices stay intact.
+    // Deactivate instead so it disappears from the storefront.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003") {
+      await prisma.product.update({ where: { id }, data: { isActive: false } });
+      revalidatePath("/admin/products");
+      revalidatePath("/products");
+      return { success: true, message: "This product has past orders, so it was deactivated instead of deleted." };
+    }
+    throw err;
+  }
 }
 
 // Category Management

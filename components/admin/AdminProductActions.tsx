@@ -23,7 +23,7 @@ export function AdminProductActions({ product }: Props) {
     setDeleting(true);
     const result = await deleteProduct(product.id);
     if (result.success) {
-      toast.success("Product deleted");
+      toast.success(result.message ?? "Product deleted");
       router.refresh();
     } else {
       toast.error("Failed to delete");
