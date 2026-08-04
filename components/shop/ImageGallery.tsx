@@ -5,13 +5,14 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
+import imageLoader from "@/lib/imageLoader";
 
 const ZOOM = 3;
 
-// Builds a Next.js /_next/image URL so the zoom panel benefits from
-// server-side optimization and caching at high resolution.
+// Resolves a high-resolution zoom-panel URL via the same loader as <Image>
+// (Cloudinary's own transformations) rather than Vercel's metered optimizer.
 function nextImageUrl(src: string, width: number, quality = 95): string {
-  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+  return imageLoader({ src, width, quality });
 }
 
 type Props = { images: string[]; alt: string };
