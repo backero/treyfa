@@ -80,6 +80,17 @@ export default async function AdminOrdersPage({
                     <span className={`text-[11px] px-2 py-1 rounded-full font-medium ${config.color}`}>
                       {config.label}
                     </span>
+                    {order.shiprocketOrderId && (
+                      <p className="text-[10px] text-green-700 mt-1">Shiprocket ✓</p>
+                    )}
+                    {!order.shiprocketOrderId && order.shiprocketError && (
+                      <p
+                        className="text-[10px] text-red-600 mt-1 max-w-[140px] truncate"
+                        title={order.shiprocketError}
+                      >
+                        Shiprocket failed
+                      </p>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <AdminOrderActions order={order} />

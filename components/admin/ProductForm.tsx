@@ -19,14 +19,58 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { X, Plus, Upload, Loader2 } from "lucide-react";
 
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB — stay under the serverless request body limit
+// Sanity cap on the original file before we even try to compress it (avoids hanging
+// the browser on something absurd) — the real size limit is enforced after compression.
+const MAX_SOURCE_BYTES = 25 * 1024 * 1024; // 25MB
+// Cloudinary uploads go through Vercel's serverless request body limit (~4.5MB), and
+// base64-encoding a file inflates it by ~33% — so the compressed image must stay well
+// under that after encoding. Phone camera photos routinely land in the 3-10MB range,
+// which is why every upload gets resized/re-encoded client-side first.
+const MAX_DIMENSION = 2000;
+const JPEG_QUALITY = 0.82;
 
-function fileToDataUrl(file: File): Promise<string> {
+function compressImage(file: File): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let { width, height } = img;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = Math.round((height * MAX_DIMENSION) / width);
+          width = MAX_DIMENSION;
+        } else {
+          width = Math.round((width * MAX_DIMENSION) / height);
+          height = MAX_DIMENSION;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas not supported on this browser"));
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error("Image compression failed"))),
+        "image/jpeg",
+        JPEG_QUALITY
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Could not read image file"));
+    };
+    img.src = objectUrl;
+  });
+}
+
+function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = reject;
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(blob);
   });
 }
 
@@ -63,9 +107,9 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
     e.target.value = "";
     if (files.length === 0) return;
 
-    const oversized = files.find((f) => f.size > MAX_UPLOAD_BYTES);
+    const oversized = files.find((f) => f.size > MAX_SOURCE_BYTES);
     if (oversized) {
-      toast.error(`${oversized.name} is too large (max 4MB). Please compress it and try again.`);
+      toast.error(`${oversized.name} is too large (max 25MB).`);
       return;
     }
 
@@ -73,7 +117,8 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
     try {
       const uploaded: string[] = [];
       for (const file of files) {
-        const dataUrl = await fileToDataUrl(file);
+        const compressed = await compressImage(file);
+        const dataUrl = await blobToDataUrl(compressed);
         const res = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

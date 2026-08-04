@@ -21,6 +21,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { updateOrderStatus, markOrderPaid, updateOrderTracking } from "@/actions/admin";
+import { retryShiprocketPush } from "@/actions/shiprocket";
 import { OrderStatus } from "@prisma/client";
 import { toast } from "sonner";
 import { MoreHorizontal, Check } from "lucide-react";
@@ -69,6 +70,18 @@ export function AdminOrderActions({ order }: Props) {
     setUpdating(false);
   }
 
+  async function handleRetryShiprocket() {
+    setUpdating(true);
+    const result = await retryShiprocketPush(order.id);
+    if (result.success) {
+      toast.success("Pushed to Shiprocket");
+      router.refresh();
+    } else {
+      toast.error(result.error ?? "Shiprocket push failed");
+    }
+    setUpdating(false);
+  }
+
   async function handleSaveTracking() {
     setUpdating(true);
     const result = await updateOrderTracking(order.id, trackingNumber.trim(), carrier.trim());
@@ -101,6 +114,11 @@ export function AdminOrderActions({ order }: Props) {
           <DropdownMenuItem onClick={() => setTrackingOpen(true)}>
             {order.trackingNumber ? "Edit Tracking Info" : "Add Tracking Info"}
           </DropdownMenuItem>
+          {!order.shiprocketOrderId && (
+            <DropdownMenuItem onClick={handleRetryShiprocket}>
+              {order.shiprocketError ? "Retry Shiprocket Push" : "Push to Shiprocket"}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <div className="px-2 py-1 text-xs text-muted-foreground font-medium">Update Status</div>
           <DropdownMenuSeparator />

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { prisma } from "@/lib/prisma";
 import { finalizeRazorpayOrder } from "@/actions/order";
+import { pushOrderToShiprocket } from "@/actions/shiprocket";
 import { sendNewOrderEmail } from "@/lib/resend";
 
 // Safety net for the client-side verify step: if the browser closes right after payment
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
             customerEmail: order.user.email ?? "",
             items: order.items.map((item) => ({ name: item.name, quantity: item.quantity, price: item.price })),
           });
+          await pushOrderToShiprocket(order.id);
         }
       }
     }

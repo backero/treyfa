@@ -8,6 +8,7 @@ import { ActionResult, OrderWithDetails } from "@/types";
 import { TAX_RATE, calculateShipping } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { sendNewOrderEmail } from "@/lib/resend";
+import { pushOrderToShiprocket } from "@/actions/shiprocket";
 import type { Order, OrderItem, Coupon } from "@prisma/client";
 
 async function resolveCoupon(
@@ -165,6 +166,8 @@ export async function createCodOrder(
     })),
   });
 
+  await pushOrderToShiprocket(order.id);
+
   revalidatePath("/orders");
   return { success: true, data: { orderId: order.id } };
 }
@@ -278,6 +281,7 @@ export async function verifyRazorpayPayment(
       customerEmail: session.user.email ?? "",
       items: order.items.map((item) => ({ name: item.name, quantity: item.quantity, price: item.price })),
     });
+    await pushOrderToShiprocket(order.id);
   }
 
   revalidatePath("/orders");
