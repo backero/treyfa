@@ -29,10 +29,27 @@ const MAX_SOURCE_BYTES = 25 * 1024 * 1024; // 25MB
 const MAX_DIMENSION = 2000;
 const JPEG_QUALITY = 0.82;
 
-function compressImage(file: File): Promise<Blob> {
+// iPhones save camera photos as HEIC/HEIF, which browsers other than Safari
+// can't decode into a <canvas> — the compression step below would silently
+// fail on them. Detected by extension too since the file input's reported
+// `type` is often blank for HEIC on Android/desktop pickers.
+function isHeic(file: File): boolean {
+  return (
+    /^image\/hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name)
+  );
+}
+
+async function toDecodableBlob(file: File): Promise<Blob> {
+  if (!isHeic(file)) return file;
+  const heic2any = (await import("heic2any")).default;
+  const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: JPEG_QUALITY });
+  return Array.isArray(converted) ? converted[0] : converted;
+}
+
+function compressImage(source: Blob): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const img = new window.Image();
-    const objectUrl = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(source);
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
       let { width, height } = img;
@@ -114,10 +131,12 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
     }
 
     setUploading(true);
-    try {
-      const uploaded: string[] = [];
-      for (const file of files) {
-        const compressed = await compressImage(file);
+    const uploaded: string[] = [];
+    const failed: { name: string; reason: string }[] = [];
+    for (const file of files) {
+      try {
+        const decodable = await toDecodableBlob(file);
+        const compressed = await compressImage(decodable);
         const dataUrl = await blobToDataUrl(compressed);
         const res = await fetch("/api/upload", {
           method: "POST",
@@ -127,14 +146,18 @@ export function ProductForm({ categories, product, onSuccess, redirectOnSuccess 
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "Upload failed");
         uploaded.push(data.url);
+      } catch (err: any) {
+        failed.push({ name: file.name, reason: err.message ?? "Unknown error" });
       }
+    }
+    if (uploaded.length > 0) {
       setImages((prev) => [...prev, ...uploaded]);
       toast.success(uploaded.length > 1 ? `${uploaded.length} images uploaded` : "Image uploaded");
-    } catch (err: any) {
-      toast.error(err.message ?? "Failed to upload image. Please try again.");
-    } finally {
-      setUploading(false);
     }
+    for (const f of failed) {
+      toast.error(`${f.name} failed to upload: ${f.reason}`, { duration: 10000 });
+    }
+    setUploading(false);
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
