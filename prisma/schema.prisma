@@ -217,6 +217,10 @@ model Order {
   deliveredAt         DateTime?
   reviewRequestSentAt DateTime?
 
+  shiprocketOrderId    String?
+  shiprocketShipmentId String?
+  shiprocketError      String?   @db.Text
+
   user      User        @relation(fields: [userId], references: [id])
   address   Address     @relation(fields: [addressId], references: [id])
   items     OrderItem[]
@@ -284,6 +288,131 @@ model Blog {
   @@index([slug])
   @@index([isPublished])
   @@index([publishedAt])
+}
+
+model Faq {
+  id          String   @id @default(cuid())
+  category    String   @default("General")
+  question    String
+  answer      String   @db.Text
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished])
+  @@index([category, order])
+}
+
+model LegalPage {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  heroLabel   String   @default("Legal")
+  title       String
+  lastUpdated String   @default("")
+  intro       String   @db.Text @default("")
+  updatedAt   DateTime @updatedAt
+
+  stats    LegalStat[]
+  sections LegalSection[]
+}
+
+model LegalStat {
+  id          String    @id @default(cuid())
+  legalPageId String
+  legalPage   LegalPage @relation(fields: [legalPageId], references: [id], onDelete: Cascade)
+  icon        String    @default("package")
+  label       String
+  value       String
+  order       Int       @default(0)
+
+  @@index([legalPageId, order])
+}
+
+model LegalSection {
+  id          String    @id @default(cuid())
+  legalPageId String
+  legalPage   LegalPage @relation(fields: [legalPageId], references: [id], onDelete: Cascade)
+  title       String
+  body        String    @db.Text
+  order       Int       @default(0)
+
+  @@index([legalPageId, order])
+}
+
+model AboutPage {
+  id                 String   @id @default(cuid())
+  heroLabel          String   @default("Our Story")
+  heroTitle          String
+  heroSubtitle       String
+  heroDescription    String   @db.Text
+  missionLabel       String   @default("Who We Are")
+  missionTitle       String
+  missionSubtitle    String
+  missionParagraph1  String   @db.Text
+  missionParagraph2  String   @db.Text
+  standardLabel      String   @default("No-Compromise Ingredient Policy")
+  standardTitle      String   @default("The Treyfa Clean Beauty Standard")
+  rndLabel           String   @default("Formulation Science")
+  rndTitle           String   @default("Validated In-House, Not Just Labelled Natural")
+  rndQuote           String   @db.Text
+  timelineLabel      String   @default("Our Journey")
+  timelineTitle      String   @default("How It Started")
+  hqCity             String
+  hqState            String
+  hqCaption          String
+  manufacturingLine1 String
+  manufacturingLine2 String
+  updatedAt          DateTime @updatedAt
+
+  stats     AboutStat[]
+  standards AboutStandard[]
+  rndStages AboutRnDStage[]
+  timeline  AboutTimelineEvent[]
+}
+
+model AboutStat {
+  id          String    @id @default(cuid())
+  aboutPageId String
+  aboutPage   AboutPage @relation(fields: [aboutPageId], references: [id], onDelete: Cascade)
+  value       String
+  label       String
+  order       Int       @default(0)
+
+  @@index([aboutPageId, order])
+}
+
+model AboutStandard {
+  id          String    @id @default(cuid())
+  aboutPageId String
+  aboutPage   AboutPage @relation(fields: [aboutPageId], references: [id], onDelete: Cascade)
+  title       String
+  desc        String    @db.Text
+  order       Int       @default(0)
+
+  @@index([aboutPageId, order])
+}
+
+model AboutRnDStage {
+  id          String    @id @default(cuid())
+  aboutPageId String
+  aboutPage   AboutPage @relation(fields: [aboutPageId], references: [id], onDelete: Cascade)
+  title       String
+  desc        String    @db.Text
+  order       Int       @default(0)
+
+  @@index([aboutPageId, order])
+}
+
+model AboutTimelineEvent {
+  id          String    @id @default(cuid())
+  aboutPageId String
+  aboutPage   AboutPage @relation(fields: [aboutPageId], references: [id], onDelete: Cascade)
+  year        String
+  event       String    @db.Text
+  order       Int       @default(0)
+
+  @@index([aboutPageId, order])
 }
 
 model ContactMessage {

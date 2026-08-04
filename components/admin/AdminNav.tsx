@@ -16,6 +16,8 @@ import {
   BookOpen,
   MessageSquare,
   Ticket,
+  HelpCircle,
+  FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,8 @@ const navItems = [
   { href: "/admin/coupons", icon: Ticket, label: "Coupons" },
   { href: "/admin/customers", icon: Users, label: "Customers" },
   { href: "/admin/blogs", icon: BookOpen, label: "Blog" },
+  { href: "/admin/faqs", icon: HelpCircle, label: "FAQs" },
+  { href: "/admin/pages", icon: FileText, label: "Page Content" },
   { href: "/admin/messages", icon: MessageSquare, label: "Messages" },
 ];
 
